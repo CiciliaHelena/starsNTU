@@ -21,9 +21,13 @@ public class StudentCourseManager {
 
 
 	static { 
-		try	{
+		// try	{
 				// read from serialized file the list of student records
+		System.out.println("1");
+
 				list = (ArrayList) IOE.readSerializedObject(filename);
+		System.out.println("2");
+				if(list == null) list = new ArrayList<StudentCourse>();
 				
 				// from list create two TreeMap: one with courseID as key and another with studentID as key
 				for (int i = 0; i < list.size(); i++) {
@@ -47,9 +51,9 @@ public class StudentCourseManager {
 					}
 				}
 
-		}  catch ( Exception e ) {
-			System.out.println( "Exception >> " + e.getMessage() );
-		}
+		// }  catch ( Exception e ) {
+		// 	System.out.println( "Exception >> " + e.getMessage() );
+		// }
 	}
 	
 	// DONE
@@ -397,7 +401,9 @@ public class StudentCourseManager {
 	}
 	
 	public static void updateStudentTM(String student) {
+		System.out.println("lalala");
 		byStudent.put(student, new LinkedList<Integer>());
+		System.out.println("la");
 	}
 	
 	public static void updateCoursetTM(String course) {

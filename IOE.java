@@ -26,10 +26,14 @@ public class IOE
 		ArrayList pDetails = null;
 		FileInputStream fis = null;
 		ObjectInputStream in = null;
+System.out.println("a");
 		try {
 			fis = new FileInputStream(filename);
+System.out.println("b");
 			in = new ObjectInputStream(fis);
+System.out.println("c");
 			pDetails = (ArrayList) in.readObject();
+System.out.println("d");
 			in.close();
 		} catch (IOException ex) {
 			ex.printStackTrace();

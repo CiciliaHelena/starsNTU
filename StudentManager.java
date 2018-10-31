@@ -14,7 +14,8 @@ public class StudentManager
 	{
 		try
 		{
-			list = (ArrayList) IOE.readSerializedObject(filename);
+			list = (ArrayList<Student>) IOE.readSerializedObject(filename);
+			if(list == null) list = new ArrayList<Student>();
 			// for (int i = 0; i < list.size(); i++)
 			// {
 			// 	Student c = (Student) list.get(i);
@@ -40,8 +41,8 @@ public class StudentManager
 		try
 		{
 			for(Student temp:list)
-				//if(studentID.equals(temp.getID())) {
-				if(studentID == temp.getID()) {
+				if(studentID.equals(temp.getID()))
+				{
 					System.out.println("Student already exist."); 
 					return;
 				}

@@ -16,6 +16,7 @@ public class CourseManager
 		try
 		{
 			list = (ArrayList) IOE.readSerializedObject(filename);
+			if(list == null) list = new ArrayList<Course>();
 			for (int i = 0; i < list.size(); i++)
 			{
 				Course c = (Course) list.get(i);
