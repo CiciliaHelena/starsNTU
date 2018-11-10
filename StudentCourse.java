@@ -6,13 +6,13 @@ public class StudentCourse implements Serializable {
 	private String courseCode;
 	private String tutGroup; // "NA" to indicate class type not conducted for the course
 	private String labGroup; // "NA" to indicate class type not conducted for the course
-	private String studentName;
+	private String studentID;
 	private int examResult; // -1 to indicate result not available yet
 	private int[] courseworkResult; // int[0] = -1 to indicate result not available yet
 	
 	
-	public StudentCourse(String sN, String cC, String tG, String lG, int size) {
-		studentName = sN;
+	public StudentCourse(String sID, String cC, String tG, String lG, int size) {
+		studentID = sID;
 		courseCode = cC;
 		tutGroup = tG;
 		labGroup = lG;
@@ -25,8 +25,8 @@ public class StudentCourse implements Serializable {
 		return courseCode;
 	}
 	
-	public String getStudentName() {
-		return studentName;
+	public String getStudentID() {
+		return studentID;
 	} 
 	
 	public String getTutGroup() {
@@ -56,7 +56,7 @@ public class StudentCourse implements Serializable {
 	public boolean equals(Object o) {
 		if (o instanceof StudentCourse) {
 			StudentCourse sc = (StudentCourse)o;
-			return (this.courseCode.equals(sc.getCourseCode()) && studentName.equals(sc.getStudentName()));
+			return (this.courseCode.equals(sc.getCourseCode()) && studentID.equals(sc.getStudentID()));
 		}
 		return false;
 	}

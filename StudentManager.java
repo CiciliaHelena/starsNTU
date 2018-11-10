@@ -94,6 +94,15 @@ public class StudentManager
 		System.out.println("Student not found");
 		return null;
 	}
+	
+	public String getStudentName(String sID)
+	{
+		for(Student temp: list)
+			if(studentID.equals(temp.getID()))
+				return temp.getID();
+		System.out.println("Student not found");
+		return "NA";
+	}
 
 	public void printStudents()
 	{

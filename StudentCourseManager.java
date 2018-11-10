@@ -46,14 +46,14 @@ public class StudentCourseManager {
 				
 				// add all students to byStudent
 				for (Student entry: studentmanager.list) {
-					byStudent.put(entry.getName(), new LinkedList<Integer>());
+					byStudent.put(entry.getID(), new LinkedList<Integer>());
 				}
 		System.out.println("75%..");
 				
 				// update indices of records
 				for (int i = 0; i < list.size(); i++) {
 					byCourse.get(list.get(i).getCourseCode()).add(i);
-					byStudent.get(list.get(i).getStudentName()).add(i);
+					byStudent.get(list.get(i).getStudentID()).add(i);
 				}
 		System.out.println("100%..");
 
@@ -63,19 +63,17 @@ public class StudentCourseManager {
 		System.out.println("Load student-course data, done\n");
 	}
 
-	public static StudentCourseManager initiate()
-	{
+	public static StudentCourseManager initiate() {
 		if(theinstance == null)
 			theinstance = new StudentCourseManager();
 		return theinstance;
 	}
 
-	// DONE
 	public void registerCourse(String profile) {
 		String student = profile;
 		if(student == null)
 			{
-				System.out.println("Enter student name: ");
+				System.out.println("Enter student ID: ");
 				student = read.nextLine();
 			}
 		coursemanager.printCourses();
@@ -89,7 +87,7 @@ public class StudentCourseManager {
 			LinkedList indexList = byCourse.get(course);
 			for (int i = 0; i < indexList.size(); i++) {
 				// if student is found in the course, cancel registration
-				if (list.get((int) indexList.get(i)).getStudentName().equals(student)) { ;
+				if (list.get((int) indexList.get(i)).getStudentID().equals(student)) { ;
 					System.out.println("Student is already registered for this course.");
 					return;
 				}			
@@ -150,10 +148,10 @@ public class StudentCourseManager {
 		}
 	}
 	
-	// DONE
 	public void printStudentList() {
 		System.out.println("Enter course code: ");
 		String course = read.nextLine();
+		String id;
 		
 		if (byCourse.containsKey(course)) {
 			String group = "NA";
@@ -167,13 +165,16 @@ public class StudentCourseManager {
 			if (!coursemanager.getLabGroup(course).isEmpty())
 				System.out.println("3: By lab group");
 			
+			System.out.println();
 			int choice = IOE.scint();
 			String selected;
 			switch(choice) {
 			// print all
 			case 1:
+				System.out.println("List of students in " + course);
 				for (int i = 0; i < size; i++) {
-					System.out.println(list.get((int) indexList.get(i)).getStudentName());
+					id = list.get((int) indexList.get(i)).getStudentID();
+					System.out.println(studentmanager.getStudentName(id));
 				}
 				return;
 			
@@ -183,6 +184,7 @@ public class StudentCourseManager {
 				if (!coursemanager.getTutGroup(course).isEmpty()) {
 					Set<String> tutGroup = coursemanager.getTutGroup(course);
 					System.out.println("Select tutorial group");
+					// prints out all tutorial groups
 					for (String key : tutGroup) {
 						System.out.println(key);
 					}
@@ -193,9 +195,11 @@ public class StudentCourseManager {
 					return;
 				}
 				// print out names
+				System.out.println("List of students in " + course + " tutorial group " + selected);
 				for (int i = 0; i < size; i++) {
 					if (list.get((int) indexList.get(i)).getTutGroup().equals(selected)) {
-						System.out.println(list.get((int) indexList.get(i)).getStudentName());
+						id = list.get((int) indexList.get(i)).getStudentID();
+						System.out.println(studentmanager.getStudentName(id));
 					}
 				}
 				return;
@@ -216,9 +220,11 @@ public class StudentCourseManager {
 					return;
 				}
 				// print out names
+				System.out.println("List of students in " + course + " lab group " + selected);
 				for (int i = 0; i < size; i++) {
 					if (list.get((int) indexList.get(i)).getLabGroup().equals(selected)) {
-						System.out.println(list.get((int) indexList.get(i)).getStudentName());
+						id = list.get((int) indexList.get(i)).getStudentID();
+						System.out.println(studentmanager.getStudentName(id));
 					}
 				}
 				return;
@@ -234,7 +240,7 @@ public class StudentCourseManager {
 	
 	// Asks user for student name and course, then lets user input the exam mark
 	public void inputExamMark () {
-		System.out.println("Enter student name: ");
+		System.out.println("Enter student ID: ");
 		String name = read.nextLine();
 		
 		if (byStudent.containsKey(name)) {
@@ -264,7 +270,7 @@ public class StudentCourseManager {
 	
 	// Asks user for student name and course, then lets user input marks for each coursework component
 	public void inputCourseworkMark () {
-		System.out.println("Enter student name: ");
+		System.out.println("Enter student ID: ");
 		String student = read.nextLine();
 		
 		if (byStudent.containsKey(student)) {
@@ -333,11 +339,11 @@ public class StudentCourseManager {
 					mark = calTotalMarks(list.get((int) indexList.get(i)));
 					if (mark == -1) return;
 					grade = convertToGrade(mark);
-					System.out.println("grade-- " + grade);
+					//System.out.println("grade-- " + grade);
 					if (grade > 0) {
-						System.out.println("Grade count before adding-- " + count);
+						//System.out.println("Grade count before adding-- " + count);
 						count[grade-1]++;
-						System.out.println("Grade count after adding-- " + count);
+						//System.out.println("Grade count after adding-- " + count);
 					}
 				}
 				break;
@@ -346,14 +352,14 @@ public class StudentCourseManager {
 				for (int i = 0; i < indexList.size(); i++) {
 					mark = list.get((int) indexList.get(i)).getExamResult();
 					if (mark == -1) {
-						System.out.println("Exam marks for student not entered yet.");
+						System.out.println("Exam marks not entered yet.");
 						return;
 					}
 					grade = convertToGrade(mark);
 					if (grade > 0) {
-						System.out.println("Grade count before adding-- " + count);
+						//System.out.println("Grade count before adding-- " + count);
 						count[grade-1]++;
-						System.out.println("Grade count after adding-- " + count);
+						//System.out.println("Grade count after adding-- " + count);
 					}
 				}
 				break;
@@ -363,7 +369,7 @@ public class StudentCourseManager {
 				for (int i = 0; i < indexList.size(); i++) {
 					int[] marks = list.get((int) indexList.get(i)).getCourseworkResult();
 					if (marks.length == 0) {
-						System.out.println("Coursework marks for student not entered yet.");
+						System.out.println("Coursework marks not entered yet.");
 						return;
 					}
 					for (int j = 0; j < marks.length; j++) {
@@ -399,7 +405,7 @@ public class StudentCourseManager {
 		String student = profile;
 		if(student == null)
 		{
-			System.out.println("Enter student name: ");
+			System.out.println("Enter student ID: ");
 			student = read.nextLine();
 		}
 
@@ -411,7 +417,7 @@ public class StudentCourseManager {
 		if (byStudent.containsKey(student)) {
 			LinkedList indexList = byStudent.get(student);
 			System.out.println("----------------------------------------------");
-			System.out.println("Student Name: " + student);
+			System.out.println("Student Name: " + studentmanager.getStudentName(student));
 			System.out.println("CGPA: " + calCGPA(student));
 			
 			// find all the courses the student registered for
