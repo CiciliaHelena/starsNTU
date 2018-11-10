@@ -14,6 +14,7 @@ public class StudentManager
 
 	private StudentManager()
 	{
+		System.out.println("Loading student data... Please wait...");
 		try
 		{
 			list = (ArrayList<Student>) IOE.readSerializedObject(filename);
@@ -24,9 +25,8 @@ public class StudentManager
 			// 	System.out.println(c);
 			// }
 		}
-		catch(Exception e){
-			//System.out.println( "Exception StudentManager() >> "+e.getMessage());
-		}
+		catch(Exception e){System.out.println( "Exception StudentManager() >> "+e.getMessage());}
+		System.out.println("Load student data, done\n");
 	}
 
 	public static StudentManager initiate()
@@ -80,10 +80,14 @@ public class StudentManager
 		System.out.println("Student not found");
 	}
 	
-	public Student getStudent()
+	public Student getStudent(String profile)
 	{
-		System.out.print("Enter student matric to show info : ");
-		studentID = scan.next().toUpperCase();
+		studentID = profile;
+		if(studentID == null)
+		{
+			System.out.print("Enter student matric to show info : ");
+			studentID = scan.next().toUpperCase();
+		}
 		for(Student temp: list)
 			if(studentID.equals(temp.getID()))
 				return temp;

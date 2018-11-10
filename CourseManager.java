@@ -18,7 +18,7 @@ public class CourseManager
 
 	private CourseManager()
 	{
-
+		System.out.println("Loading course data... Please wait...");
 		try
 		{
 			list = (ArrayList) IOE.readSerializedObject(filename);
@@ -30,6 +30,7 @@ public class CourseManager
 			}
 		}
 		catch(Exception e){System.out.println( "Exception CourseManager() >> "+e.getMessage());}
+		System.out.println("Load course data, done.\n");
 	}
 
 	public static CourseManager initiate()

@@ -27,34 +27,40 @@ public class StudentCourseManager {
 
 	private StudentCourseManager()
 	{ 
+		System.out.println("Loading student-course data... Please wait...");
 			try	{
 				// read from serialized file the list of student records
 				// System.out.println("Initializing StudentCourseManager - - -");
 				list = (ArrayList) IOE.readSerializedObject(filename);
 				// System.out.println("StudentCourse ArrayList created - - -");
-				System.out.println(list);
+				// System.out.println(list);
 				if(list == null) list = new ArrayList<StudentCourse>();
+		System.out.println("25%..");
 				
 				// from list create two TreeMap: one with courseID as key and another with studentID as key
 				// add all courses to byCourse
 				for (Course entry: coursemanager.list) {
 					byCourse.put(entry.getCourseCode(), new LinkedList<Integer>());
 				}
+		System.out.println("50%..");
 				
 				// add all students to byStudent
 				for (Student entry: studentmanager.list) {
 					byStudent.put(entry.getName(), new LinkedList<Integer>());
 				}
+		System.out.println("75%..");
 				
 				// update indices of records
 				for (int i = 0; i < list.size(); i++) {
 					byCourse.get(list.get(i).getCourseCode()).add(i);
 					byStudent.get(list.get(i).getStudentName()).add(i);
 				}
+		System.out.println("100%..");
 
 		}  catch ( Exception e ) {
 		 	System.out.println( "Exception >> " + e.getMessage() );
 		}
+		System.out.println("Load student-course data, done\n");
 	}
 
 	public static StudentCourseManager initiate()
@@ -65,9 +71,13 @@ public class StudentCourseManager {
 	}
 
 	// DONE
-	public void registerCourse() {
-		System.out.println("Enter student name: ");
-		String student = read.nextLine();
+	public void registerCourse(String profile) {
+		String student = profile;
+		if(student == null)
+			{
+				System.out.println("Enter student name: ");
+				student = read.nextLine();
+			}
 		coursemanager.printCourses();
 		System.out.println("Enter course code: ");
 		String course = read.nextLine();
@@ -385,9 +395,14 @@ public class StudentCourseManager {
 	}
 	
 	// DONE
-	public void printStudentTranscript() {
-		System.out.println("Enter student name: ");
-		String student = read.nextLine();
+	public void printStudentTranscript(String profile) {
+		String student = profile;
+		if(student == null)
+		{
+			System.out.println("Enter student name: ");
+			student = read.nextLine();
+		}
+
 		int mark;
 		String course;
 		String[] grade = {"A", "B", "C", "D", "F"};

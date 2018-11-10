@@ -30,6 +30,8 @@ public class LoginManager
 					if(temp.checkPassword(password))
 						return temp.getID();
 		}
+		System.out.println("The username or password you provided is incorrect.");
+		System.out.println("Please try again.");
 		return null;
 	}
 }

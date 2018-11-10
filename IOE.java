@@ -32,9 +32,11 @@ public class IOE
 			pDetails = (ArrayList) in.readObject();
 			in.close();
 		} catch (IOException ex) {
-			ex.printStackTrace();
+			// ex.printStackTrace();
+			System.out.println("database empty.");
 		} catch (ClassNotFoundException ex) {
-			ex.printStackTrace();
+			// ex.printStackTrace();
+			System.out.println("database error.");
 		}
 		// print out the size
 		// System.out.println(" Details Size: " + pDetails.size());
