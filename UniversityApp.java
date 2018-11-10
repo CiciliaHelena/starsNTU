@@ -4,31 +4,24 @@ import java.util.Scanner;
 
 public class UniversityApp
 {
-	public static String login(String username, String password)
-	{
-		if(username.equals("admin") && password.equals("admin"))
-			return "admin";
-		return null;
-	}
-
 	public static void main(String[] args)
 	{
 		Scanner scan = new Scanner(System.in);
 		String profile = null;
 		int token;
+		StudentCourseManager studentcoursemanager = StudentCourseManager.initiate();
+		CourseManager coursemanager = CourseManager.initiate();
+		StudentManager studentmanager = StudentManager.initiate();
+		LoginManager login = LoginManager.initiate();
 
 		System.out.println("Welcome to NTU course registration system");
 		while(profile == null)
 		{
 			System.out.println("Please log in to your account");
 			System.out.print("Matric number: ");
-			String username = scan.next();
+			String username = scan.next().toUpperCase();
 			System.out.print("Password: ");
 			profile = login(username, scan.next());
-			
-			// // ~~~
-			// profile = "HI";
-			// // ~~~
 
 			if(profile != null)
 			{
@@ -51,23 +44,23 @@ public class UniversityApp
 					token = IOE.scint();
 					switch(token)
 					{
-						case 1: StudentManager.addStudent();
+						case 1: studentmanager.addStudent();
 								break;
-						case 2: CourseManager.addCourse();
+						case 2: coursemanager.addCourse();
 								break;
-						case 3: StudentCourseManager.registerCourse();
+						case 3: studentcoursemanager.registerCourse();
 								break;
-						case 4: CourseManager.checkVacancy();
+						case 4: coursemanager.checkVacancy();
 								break;
-						case 5: StudentCourseManager.printStudentList();
+						case 5: studentcoursemanager.printStudentList();
 								break;
-						case 7: StudentCourseManager.inputCourseworkMark();
+						case 7: studentcoursemanager.inputCourseworkMark();
 								break;
-						case 8: StudentCourseManager.inputExamMark();
+						case 8: studentcoursemanager.inputExamMark();
 								break;
-						case 9: StudentCourseManager.printCourseStatistics();
+						case 9: studentcoursemanager.printCourseStatistics();
 								break;
-						case 10:StudentCourseManager.printStudentTranscript();
+						case 10:studentcoursemanager.printStudentTranscript();
 								break;
 						case 11:profile = null;
 								break;

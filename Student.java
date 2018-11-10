@@ -27,9 +27,10 @@ public class Student implements Serializable
 		return this.name;
 	}
 
-	public String getPassword()
+	public boolean checkPassword(String password)
 	{
-		return this.password;
+		if(this.password.equals(password)) return true;
+		return false;
 	}
 
 	public void setPassword(String password)

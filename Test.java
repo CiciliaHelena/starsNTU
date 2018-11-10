@@ -9,15 +9,16 @@ public class Test
 {
 	public static void main(String[] args)
 	{
-		// CourseManager.addCourse();
-		// CourseManager.printCourses();
-		// CourseManager.checkVacancy();
-		// System.out.println(CourseManager.list.size());
-		// CourseManager.deleteCourse();
+		CourseManager cm = CourseManager.initiate();
+		cm.addCourse();
+		cm.printCourses();
+		// cm.checkVacancy();
+		// System.out.println(cm.list.size());
+		// cm.deleteCourse();
 
 
-		StudentManager.addStudent();
-		StudentManager.printStudents();
+		// StudentManager.addStudent();
+		// StudentManager.printStudents();
 		// System.out.println(StudentManager.list.size());
 		// StudentManager.deleteStudent();
 	}

@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.TreeMap;
 
 // notes for myself: 
@@ -11,55 +12,63 @@ import java.util.TreeMap;
 
 
 public class StudentCourseManager {
-	private static ArrayList<StudentCourse> list = new ArrayList<StudentCourse>();
-	private static TreeMap<String, LinkedList<Integer>> byCourse = new TreeMap<String, LinkedList<Integer>>();
+	private ArrayList<StudentCourse> list = new ArrayList<StudentCourse>();
+	private TreeMap<String, LinkedList<Integer>> byCourse = new TreeMap<String, LinkedList<Integer>>();
 	// <courseID, [index of records of students taking the course]>
-	private static TreeMap<String, LinkedList<Integer>> byStudent = new TreeMap<String, LinkedList<Integer>>();
+	private TreeMap<String, LinkedList<Integer>> byStudent = new TreeMap<String, LinkedList<Integer>>();
 	// <studentID, [index of records of courses taken by student]>
-	private static String filename = "StudentCourse.dat";
-	private static Scanner read = new Scanner(System.in);
+	private String filename = "StudentCourse.dat";
+	private Scanner read = new Scanner(System.in);
+	private static StudentCourseManager theinstance = null;
+
+	private static CourseManager coursemanager = CourseManager.initiate();
+	private static StudentManager studentmanager = StudentManager.initiate();
 
 
-	static { 
-		// try	{
+	private StudentCourseManager()
+	{ 
+			try	{
 				// read from serialized file the list of student records
-		System.out.println("1");
-
+				// System.out.println("Initializing StudentCourseManager - - -");
 				list = (ArrayList) IOE.readSerializedObject(filename);
-		System.out.println("2");
+				// System.out.println("StudentCourse ArrayList created - - -");
+				System.out.println(list);
 				if(list == null) list = new ArrayList<StudentCourse>();
 				
 				// from list create two TreeMap: one with courseID as key and another with studentID as key
+				// add all courses to byCourse
+				for (Course entry: coursemanager.list) {
+					byCourse.put(entry.getCourseCode(), new LinkedList<Integer>());
+				}
+				
+				// add all students to byStudent
+				for (Student entry: studentmanager.list) {
+					byStudent.put(entry.getName(), new LinkedList<Integer>());
+				}
+				
+				// update indices of records
 				for (int i = 0; i < list.size(); i++) {
-					String course = list.get(i).getCourseCode();
-					String student = list.get(i).getStudentName();
-					
-					// byCourse
-					if (byCourse.containsKey(course)) {
-						byCourse.get(course).add(i);
-					}
-					else {
-						byCourse.put(course, new LinkedList<Integer>());
-					}
-					
-					// byStudent
-					if (byStudent.containsKey(student)) {
-						byStudent.get(student).add(i);
-					}
-					else {
-						byStudent.put(student, new LinkedList<Integer>());
-					}
+					byCourse.get(list.get(i).getCourseCode()).add(i);
+					byStudent.get(list.get(i).getStudentName()).add(i);
 				}
 
-		// }  catch ( Exception e ) {
-		// 	System.out.println( "Exception >> " + e.getMessage() );
-		// }
+		}  catch ( Exception e ) {
+		 	System.out.println( "Exception >> " + e.getMessage() );
+		}
 	}
-	
+
+	public static StudentCourseManager initiate()
+	{
+		if(theinstance == null)
+			theinstance = new StudentCourseManager();
+		return theinstance;
+	}
+
 	// DONE
-	public static void registerCourse() {
+	public void registerCourse() {
 		System.out.println("Enter student name: ");
 		String student = read.nextLine();
+		coursemanager.printCourses();
 		System.out.println("Enter course code: ");
 		String course = read.nextLine();
 		
@@ -76,14 +85,19 @@ public class StudentCourseManager {
 				}			
 			}
 			
+			if (coursemanager.getVacancy(course) <= 0) {
+				System.out.println("Course has no more vacancy.");
+				return;
+			}
+			
 			// student not registered yet, proceed with registration ---
 			int choice;
 			String tutg = "NA";
 			String labg = "NA";
 			
 			// check for available tutorial groups
-			if (CourseManager.checkAvailableTutGroup(course) != null) {
-				ArrayList<String> tutGroup = CourseManager.checkAvailableTutGroup(course);
+			ArrayList<String> tutGroup = coursemanager.checkAvailableTutGroup(course);
+			if (!tutGroup.isEmpty()) {
 				System.out.println("Select tutorial group");
 				for(int i = 0; i < tutGroup.size(); i++) {
 		            System.out.println((i+1) + ": " + tutGroup.get(i));
@@ -93,8 +107,8 @@ public class StudentCourseManager {
 			}
 			
 			// check for available lab groups
-			if (CourseManager.checkAvailableLabGroup(course) != null) {
-				ArrayList<String> labGroup = CourseManager.checkAvailableLabGroup(course);
+			ArrayList<String> labGroup = coursemanager.checkAvailableLabGroup(course);
+			if (!labGroup.isEmpty()) {				
 				System.out.println("Select lab group");
 				for(int i = 0; i < labGroup.size(); i++) {
 		            System.out.println((i+1) + ": " + labGroup.get(i));
@@ -103,7 +117,7 @@ public class StudentCourseManager {
 				labg = labGroup.get(choice-1);
 			}
 			
-			int n = CourseManager.getNumOfComponent(course);
+			int n = coursemanager.getNumOfComponent(course);
 			
 			StudentCourse newSC = new StudentCourse(student, course, tutg, labg, n);
 			// update master record
@@ -113,6 +127,10 @@ public class StudentCourseManager {
 			byStudent.get(student).add(list.size()-1);
 			// update dat file
 			IOE.writeSerializedObject(filename, list);
+			
+			// update course vacancy
+			coursemanager.updateVacancy(course, tutg, labg);
+			
 			System.out.println("Student successfully registered!");	
 		}
 		
@@ -123,7 +141,7 @@ public class StudentCourseManager {
 	}
 	
 	// DONE
-	public static void printStudentList() {
+	public void printStudentList() {
 		System.out.println("Enter course code: ");
 		String course = read.nextLine();
 		
@@ -134,12 +152,13 @@ public class StudentCourseManager {
 			
 			System.out.println("Select type of list");
 			System.out.println("1: All students in the course");
-			if (CourseManager.checkAvailableTutGroup(course) != null)
+			if (!coursemanager.getTutGroup(course).isEmpty())
 				System.out.println("2: By tutorial group");
-			if (CourseManager.checkAvailableLabGroup(course) != null)
+			if (!coursemanager.getLabGroup(course).isEmpty())
 				System.out.println("3: By lab group");
 			
 			int choice = IOE.scint();
+			String selected;
 			switch(choice) {
 			// print all
 			case 1:
@@ -151,14 +170,13 @@ public class StudentCourseManager {
 			// by tutorial group
 			case 2:
 				// get a list of tutorial groups
-				if (CourseManager.checkAvailableTutGroup(course) != null) {
-					ArrayList<String> tutGroup = CourseManager.checkAvailableTutGroup(course);
+				if (!coursemanager.getTutGroup(course).isEmpty()) {
+					Set<String> tutGroup = coursemanager.getTutGroup(course);
 					System.out.println("Select tutorial group");
-					for(int i = 0; i < tutGroup.size(); i++) {
-			            System.out.println((i+1) + ": " + tutGroup.get(i));
-			        }
-					choice = IOE.scint();
-					group = tutGroup.get(choice-1);
+					for (String key : tutGroup) {
+						System.out.println(key);
+					}
+					selected = read.nextLine();
 				}
 				else {
 					System.out.println("Invalid selection.");
@@ -166,7 +184,7 @@ public class StudentCourseManager {
 				}
 				// print out names
 				for (int i = 0; i < size; i++) {
-					if (list.get((int) indexList.get(i)).getTutGroup().equals(group)) {
+					if (list.get((int) indexList.get(i)).getTutGroup().equals(selected)) {
 						System.out.println(list.get((int) indexList.get(i)).getStudentName());
 					}
 				}
@@ -175,14 +193,13 @@ public class StudentCourseManager {
 			// by lab group
 			case 3:
 				// get a list of lab groups
-				if (CourseManager.checkAvailableLabGroup(course) != null) {
-					ArrayList<String> labGroup = CourseManager.checkAvailableLabGroup(course);
+				if (!coursemanager.getLabGroup(course).isEmpty()) {
+					Set<String> tutGroup = coursemanager.getLabGroup(course);
 					System.out.println("Select lab group");
-					for(int i = 0; i < labGroup.size(); i++) {
-			            System.out.println((i+1) + ": " + labGroup.get(i));
-			        }
-					choice = IOE.scint();
-					group = labGroup.get(choice-1);
+					for (String key : tutGroup) {
+						System.out.println(key);
+					}
+					selected = read.nextLine();
 				}
 				else {
 					System.out.println("Invalid selection.");
@@ -190,11 +207,12 @@ public class StudentCourseManager {
 				}
 				// print out names
 				for (int i = 0; i < size; i++) {
-					if (list.get((int) indexList.get(i)).getLabGroup().equals(group)) {
+					if (list.get((int) indexList.get(i)).getLabGroup().equals(selected)) {
 						System.out.println(list.get((int) indexList.get(i)).getStudentName());
 					}
 				}
 				return;
+				
 			default: break;
 			}
 		}
@@ -204,8 +222,8 @@ public class StudentCourseManager {
 		}
 	}
 	
-	// DONE
-	public static void inputExamMark () {
+	// Asks user for student name and course, then lets user input the exam mark
+	public void inputExamMark () {
 		System.out.println("Enter student name: ");
 		String name = read.nextLine();
 		
@@ -217,9 +235,12 @@ public class StudentCourseManager {
 				if (list.get((int) indexList.get(i)).getCourseCode().equals(name)) {
 					System.out.println("Enter exam mark: ");
 					int mark = IOE.scint();
-					int w = CourseManager.getExamWeightage(name);
-					list.get((int) indexList.get(i)).setExamResult(mark * w/100);
+					//int w = coursemanager.getExamWeightage(name);
+					list.get((int) indexList.get(i)).setExamResult(mark);
+					IOE.writeSerializedObject(filename, list);
 					System.out.println("Results saved.");
+					//System.out.println("test " + list.get((int) indexList.get(i)).getExamResult());
+					//System.out.println(list);
 					return;
 				}
 			}	
@@ -231,8 +252,8 @@ public class StudentCourseManager {
 			System.out.println("Invalid student.");
 	}
 	
-	// DONE
-	public static void inputCourseworkMark () {
+	// Asks user for student name and course, then lets user input marks for each coursework component
+	public void inputCourseworkMark () {
 		System.out.println("Enter student name: ");
 		String student = read.nextLine();
 		
@@ -245,19 +266,27 @@ public class StudentCourseManager {
 				// find course
 				if (list.get((int) indexList.get(i)).getCourseCode().equals(course)) {
 					// check if coursework component has been entered
-					if (CourseManager.getCourseworkComponent(course) != null) {
-						Map<String, Integer> componentWeightage = CourseManager.getCourseworkComponent(course);
+					if (coursemanager.getCourseworkComponent(course) != null) {
+						Map<String, Integer> componentWeightage = coursemanager.getCourseworkComponent(course);
+						//int w = coursemanager.getExamWeightage(course);
 						int[] marks = new int[componentWeightage.size()];
 						int j = 0;
 						int mark;
+						
 						// iterate through every component and ask for marks
 						for (Map.Entry<String, Integer> entry : componentWeightage.entrySet()) {
 						    System.out.println("Enter mark for " + entry.getKey() + ":");
 						    mark = IOE.scint();
-						    marks[j++] = mark * entry.getValue()/100; // multiply by respective component weightage
+						    marks[j++] = mark;
+						    //marks[j++] = ((mark * (int) entry.getValue() * (100-w))/10000); 
+						    //System.out.println("- - -Saved mark = " + marks[j-1]);
+						    //System.out.println("- - -Weightage = " + entry.getValue());
 						}
 						list.get((int) indexList.get(i)).setCourseworkResult(marks);
+						IOE.writeSerializedObject(filename, list);
 						System.out.println("Results saved.");
+						//System.out.println("test " + list.get((int) indexList.get(i)).getCourseworkResult()[0]);
+						//System.out.println(list);
 						return;
 					}
 					System.out.println("No information about coursework component");
@@ -274,7 +303,7 @@ public class StudentCourseManager {
 	}
 	
 	// DONE
-	public static void printCourseStatistics() {
+	public void printCourseStatistics() {
 		System.out.println("Enter course code: ");
 		String course = read.nextLine();
 		int[] count = {0,0,0,0,0}; //[A,B,C,D,F]
@@ -291,10 +320,14 @@ public class StudentCourseManager {
 			switch(choice) {
 			case 1: 
 				for (int i = 0; i < indexList.size(); i++) {
-					mark = list.get((int) indexList.get(i)).calTotalMarks();
+					mark = calTotalMarks(list.get((int) indexList.get(i)));
+					if (mark == -1) return;
 					grade = convertToGrade(mark);
+					System.out.println("grade-- " + grade);
 					if (grade > 0) {
+						System.out.println("Grade count before adding-- " + count);
 						count[grade-1]++;
+						System.out.println("Grade count after adding-- " + count);
 					}
 				}
 				break;
@@ -302,9 +335,15 @@ public class StudentCourseManager {
 			case 2: 
 				for (int i = 0; i < indexList.size(); i++) {
 					mark = list.get((int) indexList.get(i)).getExamResult();
+					if (mark == -1) {
+						System.out.println("Exam marks for student not entered yet.");
+						return;
+					}
 					grade = convertToGrade(mark);
 					if (grade > 0) {
+						System.out.println("Grade count before adding-- " + count);
 						count[grade-1]++;
+						System.out.println("Grade count after adding-- " + count);
 					}
 				}
 				break;
@@ -313,6 +352,10 @@ public class StudentCourseManager {
 				int sum = 0;
 				for (int i = 0; i < indexList.size(); i++) {
 					int[] marks = list.get((int) indexList.get(i)).getCourseworkResult();
+					if (marks.length == 0) {
+						System.out.println("Coursework marks for student not entered yet.");
+						return;
+					}
 					for (int j = 0; j < marks.length; j++) {
 						sum = sum + marks[j];
 					}
@@ -342,43 +385,83 @@ public class StudentCourseManager {
 	}
 	
 	// DONE
-	public static void printStudentTranscript() {
+	public void printStudentTranscript() {
 		System.out.println("Enter student name: ");
 		String student = read.nextLine();
 		int mark;
 		String course;
 		String[] grade = {"A", "B", "C", "D", "F"};
+		StudentCourse sC;
 		
 		if (byStudent.containsKey(student)) {
 			LinkedList indexList = byStudent.get(student);
-			System.out.println("------------------------------------");
+			System.out.println("----------------------------------------------");
 			System.out.println("Student Name: " + student);
-			for (int i = 0; i < indexList.size(); i++) {
-				course = list.get((int) indexList.get(i)).getCourseCode();
-				mark = list.get((int) indexList.get(i)).calTotalMarks();
-				System.out.println(course + ": " + grade[convertToGrade(mark)-1]);	
-			}
-			System.out.println();
 			System.out.println("CGPA: " + calCGPA(student));
-			System.out.println("------------------------------------");
+			
+			// find all the courses the student registered for
+			for (int i = 0; i < indexList.size(); i++) {
+				sC = list.get((int) indexList.get(i));
+				System.out.println();
+				course = sC.getCourseCode();
+				System.out.println("|" + course + ": " + coursemanager.getCourseName(course) + "|");
+				mark = calTotalMarks(sC);
+				int w = coursemanager.getExamWeightage(course);
+				
+				if (mark >= 0) {
+					System.out.println("Overall Mark: " + mark);
+					System.out.println("Grade: " + grade[convertToGrade(mark)-1]);	
+					System.out.println();
+					System.out.format("%-15s %-10s %-15s%n", "Component", "Mark", "Weightage");
+					System.out.format("%-15s %-10s %-15s%n", "Exam", sC.getExamResult(), w);
+					
+					// for courseworks with sub-components
+					if (sC.getCourseworkResult().length > 1) {
+						Map<String, Integer> cwW = coursemanager.getCourseworkComponent(sC.getCourseCode());
+						int[] cwR = sC.getCourseworkResult();
+						int j = 0;
+						System.out.println("Coursework");
+						for (Map.Entry<String, Integer> entry : cwW.entrySet()) {
+							System.out.print("   ");
+							System.out.format("%-12s %-10s %-15s%n", entry.getKey(), cwR[j++], entry.getValue()*(100-w)/100);
+						}	
+					}
+					// for courseworks as the main component only
+					else {
+						System.out.format("%-15s %-10s %-15s%n", "Coursework", sC.getCourseworkResult()[0], (100-w));
+					}
+				}
+				else {
+					System.out.println("Results for this course is not available yet");
+				}
+				System.out.println();
+			}
+			System.out.println("----------------------------------------------");
 		}
+		// student not found
+		else System.out.println("Invalid student.");
 	}
 	
-	public static double calCGPA(String student) {
+	public double calCGPA(String student) {
 		double totalGPA = 0;
 		int mark;
+		int n = 0;
 		if (byStudent.containsKey(student)) {
 			LinkedList indexList = byStudent.get(student);
 			for (int i = 0; i < indexList.size(); i++) {
-				mark = list.get((int) indexList.get(i)).calTotalMarks();
-				totalGPA = totalGPA + convertToGPA(mark);
+				mark = calTotalMarks(list.get((int) indexList.get(i)));
+				if (mark >= 0) {
+					totalGPA = totalGPA + convertToGPA(mark);
+					n++;
+				}
 			}
-			return (totalGPA/indexList.size());
+			return (totalGPA/n);
 		}
 		return -1;
 	}
 	
-	private static int convertToGrade(int mark) {
+	private int convertToGrade(int mark) {
+		//System.out.println("Mark to convert-- " + mark);
 		if (mark >= 0 && mark <= 100) { // check if mark is in range
 			if (mark >= 80) return 1;
 			else if (mark >= 70) return 2;
@@ -389,7 +472,7 @@ public class StudentCourseManager {
 		return -1; // invalid mark
 	}
 	
-	private static double convertToGPA(int mark) {
+	private double convertToGPA(int mark) {
 		if (mark >= 0 && mark <= 100) { // check if mark is in range
 			if (mark >= 80) return 5.00;
 			else if (mark >= 70) return 4.00;
@@ -400,14 +483,40 @@ public class StudentCourseManager {
 		return -1; // invalid mark
 	}
 	
-	public static void updateStudentTM(String student) {
-		System.out.println("lalala");
-		byStudent.put(student, new LinkedList<Integer>());
-		System.out.println("la");
+	// calculates the total marks of a student for a particular course by taking individual component with its weightage
+	// return -1 if the marks have not been entered yet
+	private int calTotalMarks(StudentCourse sC) {
+		//System.out.println("Calculating total marks- - -");
+		// check if marks have been entered
+		if (sC.getExamResult() != -1 && sC.getCourseworkResult()[0] != -1) {
+			int w = coursemanager.getExamWeightage(sC.getCourseCode());
+			int totalMarks = (sC.getExamResult() * w)/ 100; // adjust exam mark according to weightage
+			int[] cwR = sC.getCourseworkResult();
+			int i = 0;
+			Map<String, Integer> cwW = coursemanager.getCourseworkComponent(sC.getCourseCode());
+			
+			for (Map.Entry<String, Integer> entry : cwW.entrySet()) {
+				// adjust component marks according to each weightage
+				totalMarks = totalMarks + (cwR[i++] * (100-w) * entry.getValue())/10000;
+			}
+			return totalMarks;
+		}
+		else { // if not then grade is not calculated 
+			//System.out.println("Not enough information to calculate grade.");
+			return -1;
+		}
 	}
 	
-	public static void updateCoursetTM(String course) {
-		byStudent.put(course, new LinkedList<Integer>());
+	public void updateStudentTM(String student) {
+		System.out.println("Updating byStudent TreeMap");
+		byStudent.put(student, new LinkedList<Integer>());
+		System.out.println("byStudent- " + byStudent);
+	}
+	
+	public void updateCourseTM(String course) {
+		System.out.println("Updating byCourse TreeMap");
+		byCourse.put(course, new LinkedList<Integer>());
+		System.out.println("byCourse- " + byCourse);
 	}
 	
 }

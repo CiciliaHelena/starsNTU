@@ -5,12 +5,14 @@ import java.util.Scanner;
 
 public class StudentManager
 { //this is a control class
-	protected static ArrayList<Student> list = new ArrayList<Student>();
-	private static String filename = "student.dat";
-	private static Scanner scan = new Scanner(System.in);
-	private static String studentID;
+	protected ArrayList<Student> list = new ArrayList<Student>();
+	private String filename = "student.dat";
+	private Scanner scan = new Scanner(System.in);
+	private String studentID;
+	private static StudentManager theinstance = null;
+	private static StudentCourseManager studentcoursemanager = StudentCourseManager.initiate();
 
-	static
+	private StudentManager()
 	{
 		try
 		{
@@ -27,8 +29,16 @@ public class StudentManager
 		}
 	}
 
-	public static void addStudent()
+	public static StudentManager initiate()
 	{
+		if(theinstance == null)
+			theinstance = new StudentManager();
+		return theinstance;
+	}
+
+	public void addStudent()
+	{
+		System.out.println(list);
 		System.out.print("Adding student. ");
 		System.out.println("Enter the student ID: ");
 		String sID = scan.next().toUpperCase(); scan.nextLine();
@@ -48,7 +58,7 @@ public class StudentManager
 				}
 			list.add(student);
 			IOE.writeSerializedObject(filename, list);
-			StudentCourseManager.updateStudentTM(student.getName()); // (By CY) for StudentCourse pls keep this
+			studentcoursemanager.updateStudentTM(student.getName()); // (By CY) for StudentCourse pls keep this
 			System.out.println("Successfully added student.");
 		}
 		catch ( Exception e ){
@@ -56,7 +66,7 @@ public class StudentManager
 		}
 	}
 
-	public static void deleteStudent()
+	public void deleteStudent()
 	{
 		System.out.print("Enter student matric to delete: ");
 		studentID = scan.next().toUpperCase();
@@ -70,7 +80,7 @@ public class StudentManager
 		System.out.println("Student not found");
 	}
 	
-	public static Student getStudent()
+	public Student getStudent()
 	{
 		System.out.print("Enter student matric to show info : ");
 		studentID = scan.next().toUpperCase();
@@ -81,7 +91,7 @@ public class StudentManager
 		return null;
 	}
 
-	public static void printStudents()
+	public void printStudents()
 	{
 		System.out.println("Print all students.");
 		try

@@ -5,7 +5,7 @@ public class StudentCourseTest {
 		StudentCourseManager scMan = new StudentCourseManager();
 		//scMan.registerCourse();
 		//scMan.printStudentList();
-		scMan.inputExamMark(60);
+		scMan.inputExamMark();
 		scMan.inputCourseworkMark();
 		//scMan.printCourseStatistics();
 		scMan.printStudentTranscript();
