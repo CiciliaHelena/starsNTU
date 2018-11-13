@@ -45,8 +45,8 @@ public class CourseManager
 		String courseName;
 		String coordinator;
 		int[] numOfGroup = new int[3];  // [lec, tut, lab]
-		Map <String, Integer> tutGroups;  // <index, vacancy>
-		Map <String, Integer> labGroups;  // <index, vacancy>
+		Map <String, Integer> tutGroups = null;  // <index, vacancy>
+		Map <String, Integer> labGroups = null;  // <index, vacancy>
 		int overallVacancy;
 		int examWeightage;
 		Map <String, Integer> courseworkComponent = new Hashtable<String, Integer>();  // <type, weightage>
