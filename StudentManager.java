@@ -38,7 +38,6 @@ public class StudentManager
 
 	public void addStudent()
 	{
-		System.out.println(list);
 		System.out.print("Adding student. ");
 		System.out.println("Enter the student ID: ");
 		String sID = scan.next().toUpperCase(); scan.nextLine();

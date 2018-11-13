@@ -45,8 +45,8 @@ public class CourseManager
 		String courseName;
 		String coordinator;
 		int[] numOfGroup = new int[3];  // [lec, tut, lab]
-		Map <String, Integer> tutGroups = new Hashtable<String, Integer>();  // <index, vacancy>
-		Map <String, Integer> labGroups = new Hashtable<String, Integer>();  // <index, vacancy>
+		Map <String, Integer> tutGroups;  // <index, vacancy>
+		Map <String, Integer> labGroups;  // <index, vacancy>
 		int overallVacancy;
 		int examWeightage;
 		Map <String, Integer> courseworkComponent = new Hashtable<String, Integer>();  // <type, weightage>
@@ -81,12 +81,14 @@ public class CourseManager
 		overallVacancy = IOE.scint();
 
 		int k, l;
-		boolean okflag = false;
+		boolean okflag;
 
 		if(numOfGroup[1] != 0)
 		{
+			okflag = false;
 			while(!okflag)
 			{
+				tutGroups = new Hashtable<String, Integer>();  // <index, vacancy>
 				k = 0;
 				System.out.print("Enter the number of tutorial group available : ");
 				n = IOE.scint();
@@ -111,8 +113,10 @@ public class CourseManager
 
 		if(numOfGroup[2] != 0)
 		{
+			okflag = false;
 			while(!okflag)
 			{
+				labGroups = new Hashtable<String, Integer>();  // <index, vacancy>
 				k = 0;
 				System.out.print("Enter the number of lab group available : ");
 				n = IOE.scint();
@@ -135,24 +139,34 @@ public class CourseManager
 			}
 		}
 
-
-		System.out.print("Enter the exam weightage: "); 
-		examWeightage = IOE.scint();
-		System.out.println("Enter the number of coursework components in this course: ");
-		n = IOE.scint();
-		read.nextLine();
-		if (n == 1) {
-			courseworkComponent.put("Coursework", 100);
+		int total, lol;
+		do
+		{
+			total = 0;
+			System.out.print("Enter the exam weightage: "); 
+			examWeightage = IOE.scint();
+			total += examWeightage;
+			System.out.println("Enter the number of coursework components in this course: ");
+			n = IOE.scint();
+			read.nextLine();
+			if (n == 0)
+				courseworkComponent.put("Coursework", 100);
+			else
+				for(int i = 0 ;i < n; i++)
+				{
+					System.out.print("Key in the name of component "+(i+1)+" : ");
+					temp = read.nextLine();
+					System.out.print("Key in the weightage of component "+(i+1)+" : ");
+					lol = IOE.scint();
+					courseworkComponent.put(temp, lol);
+					total += lol;
+				}
+			if(total != 100) System.err.println("Total percentage must be equal to 100%!");
 		}
-		else
-			for(int i = 0 ;i < n; i++)
-			{
-				System.out.print("Key in the name of component "+(i+1)+" : ");
-				temp = read.nextLine();
-				System.out.print("Key in the weightage of component "+(i+1)+" : ");
-				courseworkComponent.put(temp, IOE.scint());
-			}
-		Course course = new Course(courseCode, courseName, coordinator, numOfGroup, tutGroups,labGroups, overallVacancy, examWeightage, courseworkComponent);
+		while(total != 100);
+
+		Course course = new Course(courseCode, courseName, coordinator, numOfGroup,
+		 tutGroups,labGroups, overallVacancy, examWeightage, courseworkComponent);
 		courseCode = course.getCourseCode();
 		try
 		{
@@ -247,7 +261,7 @@ public class CourseManager
 
 	public void printCourses()
 	{
-		System.out.println("All courses");
+		System.out.println("Print all courses");
 		try
 		{
 			for(Course temp:list)

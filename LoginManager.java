@@ -21,7 +21,7 @@ public class LoginManager
 
 	public String login(String username, String password)
 	{
-		if(username.equals("admin") && password.equals("admin"))
+		if(username.equals("ADMIN") && password.equals("admin"))
 			return "admin";
 		else
 		{

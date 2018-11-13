@@ -74,11 +74,11 @@ public class StudentCourseManager {
 		if(student == null)
 			{
 				System.out.println("Enter student ID: ");
-				student = read.nextLine();
+				student = read.next();
 			}
 		coursemanager.printCourses();
 		System.out.println("Enter course code: ");
-		String course = read.nextLine();
+		String course = read.next().toUpperCase();
 		
 		// check if student and course exists
 		if (byCourse.containsKey(course) && byStudent.containsKey(student)) { 
@@ -150,7 +150,7 @@ public class StudentCourseManager {
 	
 	public void printStudentList() {
 		System.out.println("Enter course code: ");
-		String course = read.nextLine();
+		String course = read.next().toUpperCase();
 		String id;
 		
 		if (byCourse.containsKey(course)) {
@@ -276,7 +276,7 @@ public class StudentCourseManager {
 		if (byStudent.containsKey(student)) {
 			LinkedList indexList = byStudent.get(student);
 			System.out.println("Enter course code: ");
-			String course = read.nextLine();
+			String course = read.next().toUpperCase();
 			
 			for (int i = 0; i < indexList.size(); i++) {
 				// find course
@@ -321,7 +321,7 @@ public class StudentCourseManager {
 	// DONE
 	public void printCourseStatistics() {
 		System.out.println("Enter course code: ");
-		String course = read.nextLine();
+		String course = read.next().toUpperCase();
 		int[] count = {0,0,0,0,0}; //[A,B,C,D,F]
 		int mark, grade;
 		
