@@ -81,7 +81,7 @@ public class UniversityApp
 					}
 					System.out.print("\n==================================================================\n");
 				}
-				while(token != 11);
+				while(token != 12);
 			}
 
 			if(profile != null)
@@ -124,7 +124,7 @@ public class UniversityApp
 					}
 					System.out.print("\n==================================================================\n");
 				}
-				while(token != 6);
+				while(token != 7);
 			}
 		}
 	}
