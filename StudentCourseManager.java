@@ -46,6 +46,7 @@ public class StudentCourseManager {
 				
 				// add all students to byStudent
 				for (Student entry: studentmanager.list) {
+					System.out.println("arrgrggrg");
 					byStudent.put(entry.getID(), new LinkedList<Integer>());
 				}
 		System.out.println("75%..");
@@ -74,26 +75,30 @@ public class StudentCourseManager {
 		if(student == null)
 			{
 				System.out.println("Enter student ID: ");
-				student = read.next();
+				student = read.next().toUpperCase();
 			}
 		coursemanager.printCourses();
 		System.out.println("Enter course code: ");
 		String course = read.next().toUpperCase();
 		
 		// check if student and course exists
-		if (byCourse.containsKey(course) && byStudent.containsKey(student)) { 
+		if (byCourse.containsKey(course) && byStudent.containsKey(student))
+		{ 
 			
 			// check if student is already registered for the course
 			LinkedList indexList = byCourse.get(course);
-			for (int i = 0; i < indexList.size(); i++) {
+			for (int i = 0; i < indexList.size(); i++)
+			{
 				// if student is found in the course, cancel registration
-				if (list.get((int) indexList.get(i)).getStudentID().equals(student)) { ;
+				if (list.get((int) indexList.get(i)).getStudentID().equals(student))
+				{ ;
 					System.out.println("Student is already registered for this course.");
 					return;
 				}			
 			}
 			
-			if (coursemanager.getVacancy(course) <= 0) {
+			if (coursemanager.getVacancy(course) <= 0)
+			{
 				System.out.println("Course has no more vacancy.");
 				return;
 			}
@@ -143,7 +148,8 @@ public class StudentCourseManager {
 		}
 		
 		// student or course doesn't exist, cancel registration
-		else { 
+		else
+		{ 
 			System.out.println("Invalid student or course.");
 		}
 	}
@@ -406,7 +412,7 @@ public class StudentCourseManager {
 		if(student == null)
 		{
 			System.out.println("Enter student ID: ");
-			student = read.nextLine();
+			student = read.next().toUpperCase();
 		}
 
 		int mark;

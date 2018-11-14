@@ -13,7 +13,6 @@ public class CourseManager
 	private Scanner scan = new Scanner(System.in);
 	private String courseCode;
 	private static CourseManager theinstance = null;
-	private static StudentCourseManager studentcoursemanager = StudentCourseManager.initiate();
 
 
 	private CourseManager()
@@ -175,7 +174,6 @@ public class CourseManager
 					{System.out.println("Course already exist"); return;}
 			list.add(course);
 			IOE.writeSerializedObject(filename, list);
-			studentcoursemanager.updateCourseTM(course.getCourseCode()); // (By CY) for StudentCourse pls keep this
 			System.out.println("successfully updated course list");
 		}
 		catch ( Exception e ){System.out.println( "Exception addCourse() >> " + e.getMessage());}

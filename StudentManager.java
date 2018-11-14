@@ -10,7 +10,6 @@ public class StudentManager
 	private Scanner scan = new Scanner(System.in);
 	private String studentID;
 	private static StudentManager theinstance = null;
-	private static StudentCourseManager studentcoursemanager = StudentCourseManager.initiate();
 
 	private StudentManager()
 	{
@@ -57,7 +56,6 @@ public class StudentManager
 				}
 			list.add(student);
 			IOE.writeSerializedObject(filename, list);
-			studentcoursemanager.updateStudentTM(student.getName()); // (By CY) for StudentCourse pls keep this
 			System.out.println("Successfully added student.");
 		}
 		catch ( Exception e ){

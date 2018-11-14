@@ -58,8 +58,10 @@ public class UniversityApp
 								break;
 						case 3: studentmanager.printStudents();
 								studentmanager.addStudent();
+								studentcoursemanager.updateStudentTM(student.getName()); // (By CY) for StudentCourse pls keep this
 								break;
 						case 4: coursemanager.addCourse();
+								studentcoursemanager.updateCourseTM(course.getCourseCode()); // (By CY) for StudentCourse pls keep this
 								break;
 						case 5: studentcoursemanager.registerCourse(null);
 								break;
@@ -76,6 +78,7 @@ public class UniversityApp
 						case 11:studentcoursemanager.printStudentTranscript(null);
 								break;
 						case 12:profile = null;
+								System.out.println("Log-out successfully.");
 								break;
 						default:break;
 					}
@@ -119,6 +122,7 @@ public class UniversityApp
 						case 6:studentcoursemanager.printStudentTranscript(profile);
 								break;
 						case 7:profile = null;
+								System.out.println("Log-out successfully.");
 								break;
 						default:break;
 					}
