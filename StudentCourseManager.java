@@ -7,15 +7,12 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
 
-// notes for myself: 
-// - add code in Course and Student class to add entries to both TreeMaps when addCourse or addStudent
-
 
 public class StudentCourseManager {
 	private ArrayList<StudentCourse> list = new ArrayList<StudentCourse>();
-	private TreeMap<String, LinkedList<Integer>> byCourse = new TreeMap<String, LinkedList<Integer>>();
+	private static TreeMap<String, LinkedList<Integer>> byCourse = new TreeMap<String, LinkedList<Integer>>();
 	// <courseID, [index of records of students taking the course]>
-	private TreeMap<String, LinkedList<Integer>> byStudent = new TreeMap<String, LinkedList<Integer>>();
+	private static TreeMap<String, LinkedList<Integer>> byStudent = new TreeMap<String, LinkedList<Integer>>();
 	// <studentID, [index of records of courses taken by student]>
 	private String filename = "StudentCourse.dat";
 	private Scanner read = new Scanner(System.in);
@@ -27,13 +24,10 @@ public class StudentCourseManager {
 
 	private StudentCourseManager()
 	{ 
-		System.out.println("Loading student-course data... Please wait...");
+		System.out.println("Loading grades data... Please wait...");
 			try	{
 				// read from serialized file the list of student records
-				// System.out.println("Initializing StudentCourseManager - - -");
 				list = (ArrayList) IOE.readSerializedObject(filename);
-				// System.out.println("StudentCourse ArrayList created - - -");
-				// System.out.println(list);
 				if(list == null) list = new ArrayList<StudentCourse>();
 		System.out.println("25%..");
 				
@@ -46,7 +40,6 @@ public class StudentCourseManager {
 				
 				// add all students to byStudent
 				for (Student entry: studentmanager.list) {
-					System.out.println("arrgrggrg");
 					byStudent.put(entry.getID(), new LinkedList<Integer>());
 				}
 		System.out.println("75%..");
@@ -56,12 +49,16 @@ public class StudentCourseManager {
 					byCourse.get(list.get(i).getCourseCode()).add(i);
 					byStudent.get(list.get(i).getStudentID()).add(i);
 				}
+				System.out.println(byCourse);
+				System.out.println(byStudent);
 		System.out.println("100%..");
+		//coursemanager.initSCM();
+		//studentmanager.initSCM();
 
 		}  catch ( Exception e ) {
 		 	System.out.println( "Exception >> " + e.getMessage() );
 		}
-		System.out.println("Load student-course data, done\n");
+		System.out.println("Load grades data, done.\n");
 	}
 
 	public static StudentCourseManager initiate() {
@@ -74,31 +71,28 @@ public class StudentCourseManager {
 		String student = profile;
 		if(student == null)
 			{
+				studentmanager.printStudents();
 				System.out.println("Enter student ID: ");
-				student = read.next().toUpperCase();
+				student = read.next();
 			}
 		coursemanager.printCourses();
 		System.out.println("Enter course code: ");
 		String course = read.next().toUpperCase();
 		
 		// check if student and course exists
-		if (byCourse.containsKey(course) && byStudent.containsKey(student))
-		{ 
+		if (byCourse.containsKey(course) && byStudent.containsKey(student)) { 
 			
 			// check if student is already registered for the course
 			LinkedList indexList = byCourse.get(course);
-			for (int i = 0; i < indexList.size(); i++)
-			{
+			for (int i = 0; i < indexList.size(); i++) {
 				// if student is found in the course, cancel registration
-				if (list.get((int) indexList.get(i)).getStudentID().equals(student))
-				{ ;
+				if (list.get((int) indexList.get(i)).getStudentID().equals(student)) { ;
 					System.out.println("Student is already registered for this course.");
 					return;
 				}			
 			}
 			
-			if (coursemanager.getVacancy(course) <= 0)
-			{
+			if (coursemanager.getVacancy(course) <= 0) {
 				System.out.println("Course has no more vacancy.");
 				return;
 			}
@@ -148,8 +142,7 @@ public class StudentCourseManager {
 		}
 		
 		// student or course doesn't exist, cancel registration
-		else
-		{ 
+		else { 
 			System.out.println("Invalid student or course.");
 		}
 	}
@@ -412,7 +405,7 @@ public class StudentCourseManager {
 		if(student == null)
 		{
 			System.out.println("Enter student ID: ");
-			student = read.next().toUpperCase();
+			student = read.nextLine();
 		}
 
 		int mark;
@@ -534,16 +527,12 @@ public class StudentCourseManager {
 		}
 	}
 	
-	public void updateStudentTM(String student) {
-		System.out.println("Updating byStudent TreeMap");
+	public static void updateStudentTM(String student) {
 		byStudent.put(student, new LinkedList<Integer>());
-		System.out.println("byStudent- " + byStudent);
 	}
 	
-	public void updateCourseTM(String course) {
-		System.out.println("Updating byCourse TreeMap");
+	public static void updateCourseTM(String course) {
 		byCourse.put(course, new LinkedList<Integer>());
-		System.out.println("byCourse- " + byCourse);
 	}
 	
 }

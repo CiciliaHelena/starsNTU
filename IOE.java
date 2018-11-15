@@ -33,10 +33,10 @@ public class IOE
 			in.close();
 		} catch (IOException ex) {
 			// ex.printStackTrace();
-			System.out.println("database empty.");
+			System.out.println("Database empty.");
 		} catch (ClassNotFoundException ex) {
 			// ex.printStackTrace();
-			System.out.println("database error.");
+			System.out.println("Database error.");
 		}
 		// print out the size
 		// System.out.println(" Details Size: " + pDetails.size());
