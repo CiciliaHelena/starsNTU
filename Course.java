@@ -15,7 +15,7 @@ public class Course implements Serializable
 	private int initialVacancy;
 	private int examWeightage;
 	private Map <String, Integer> courseworkComponent = new Hashtable<String, Integer>();  // <type, weightage>
-
+	boolean
 
 
 
@@ -87,8 +87,7 @@ public class Course implements Serializable
 	}
 
 	@Override
-	public String toString()
-	{
+	public String toString(){
 		return courseCode+" : "+courseName;
 	}
 }
