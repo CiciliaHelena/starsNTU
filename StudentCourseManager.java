@@ -7,16 +7,12 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
 
+// notes for myself: 
+// - add code in Course and Student class to add entries to both TreeMaps when addCourse or addStudent
+
 
 public class StudentCourseManager {
-	/**
-	 * ArrayList containing all StudentCourse objects stored in the dat file.
-	 */
 	private ArrayList<StudentCourse> list = new ArrayList<StudentCourse>();
-	
-	/**
-	 * TreeMap that maps the course code to a list of indices 
-	 */
 	private TreeMap<String, LinkedList<Integer>> byCourse = new TreeMap<String, LinkedList<Integer>>();
 	// <courseID, [index of records of students taking the course]>
 	private TreeMap<String, LinkedList<Integer>> byStudent = new TreeMap<String, LinkedList<Integer>>();
@@ -28,14 +24,19 @@ public class StudentCourseManager {
 	private static CourseManager coursemanager = CourseManager.initiate();
 	private static StudentManager studentmanager = StudentManager.initiate();
 
-
+	/**
+	 * Creates a new StudentCourseManager.
+	 * Populates ArrayList list with all StudentCourse objects stored in the dat file.
+	 * Populates TreeMap byCourse.
+	 * Populates TreeMap byStudent.
+	 */
 	private StudentCourseManager()
 	{ 
 		System.out.println("Loading grades data... Please wait...");
 			try	{
 				list = (ArrayList) IOE.readSerializedObject(filename);
 				if(list == null) list = new ArrayList<StudentCourse>();
-		System.out.println("25%..");
+		System.out.println("25% ..");
 				
 				// from list create two TreeMap: one with courseID as key and another with studentID as key
 				// add all courses to byCourse
@@ -63,23 +64,34 @@ public class StudentCourseManager {
 		System.out.println("Load grades data, done.\n");
 	}
 
+	/**
+	 * Returns StudentCourseManager instance.
+	 * @return If StudentCourseManager has been instantiated, returns the same instance of StudentCourseManager.
+	 * 		   Else, creates a new StudentCourseManager and returns it. Saves this instance to theinstance so 
+	 * 		   that the same instance will be return each time initiate() is called.
+	 */
 	public static StudentCourseManager initiate() {
 		if(theinstance == null)
 			theinstance = new StudentCourseManager();
 		return theinstance;
 	}
 
+	/**
+	 * Register for a course.
+	 * @param profile This StudentCourse's student ID. If null is passed into profile, the user will be asked to
+	 * 				  input a valid student ID.
+	 */
 	public void registerCourse(String profile) {
 		String student = profile;
 		if(student == null)
 			{
 				studentmanager.printStudents();
 				System.out.println("Enter student ID: ");
-				student = read.next().toUpperCase(); read.nextLine();
+				student = read.next().toUpperCase();
 			}
 		coursemanager.printCourses();
 		System.out.println("Enter course code: ");
-		String course = read.next().toUpperCase(); read.nextLine();
+		String course = read.next().toUpperCase();
 		
 		// check if student and course exists
 		if (byCourse.containsKey(course) && byStudent.containsKey(student))
@@ -91,7 +103,7 @@ public class StudentCourseManager {
 			{
 				// if student is found in the course, cancel registration
 				if (list.get((int) indexList.get(i)).getStudentID().equals(student))
-				{ ;
+				{ 
 					System.out.println("Student is already registered for this course.");
 					return;
 				}			
@@ -180,14 +192,19 @@ public class StudentCourseManager {
 		}
 	}
 	
+	/**
+	 * Prints out the list of students registered for a course.
+	 * Asks user to input course code.
+	 * User can choose to print all the students in the course or students in a particular tutorial or lab group.
+	 */
 	public void printStudentList() {
 		System.out.println("Enter course code: ");
-		String course = read.next().toUpperCase(); read.hasNextLine();
+		String course = read.next().toUpperCase();
 		String id;
 		
 		if (byCourse.containsKey(course)) {
 			String group = "NA";
-			LinkedList indexList = byCourse.get(course);
+			LinkedList<Integer> indexList = byCourse.get(course);
 			int size = indexList.size();
 			
 			System.out.println("Select type of list");
@@ -221,12 +238,12 @@ public class StudentCourseManager {
 						System.out.println(key);
 					}
 					read.nextLine();
-					selected = read.nextLine().toUpperCase();
+					selected = read.nextLine();
 					while (!tutGroup.contains(selected))
 					{
 						System.out.println("Invalid tutorial group. Please try again.");
 						System.out.println("Select tutorial group: ");
-						selected = read.next().toUpperCase(); read.nextLine();
+						selected = read.next(); read.nextLine();
 					}
 				}
 				else {
@@ -253,12 +270,12 @@ public class StudentCourseManager {
 						System.out.println(key);
 					}
 					read.nextLine();
-					selected = read.nextLine().toUpperCase();
+					selected = read.nextLine();
 					while (!labGroup.contains(selected))
 					{
 						System.out.println("Invalid lab group. Please try again.");
 						System.out.println("Select lab group: ");
-						selected = read.next().toUpperCase(); read.nextLine();
+						selected = read.next(); read.nextLine();
 					}
 				}
 				else {
@@ -284,15 +301,19 @@ public class StudentCourseManager {
 		}
 	}
 	
-	// Asks user for student name and course, then lets user input the exam mark
+	/**
+	 * Allows user to input a student's exam mark of a course.
+	 * Asks user to input student ID and course code, then lets user input the exam mark.
+	 * Updates the dat file after successful course registration.
+	 */
 	public void inputExamMark () {
 		System.out.println("Enter student ID: ");
-		String name = read.nextLine().toUpperCase();
+		String name = read.nextLine();
 		
 		if (byStudent.containsKey(name)) {
-			LinkedList indexList = byStudent.get(name);
+			LinkedList<Integer> indexList = byStudent.get(name);
 			System.out.println("Enter course code: ");
-			name = read.nextLine().toUpperCase();
+			name = read.nextLine();
 			for (int i = 0; i < indexList.size(); i++) {
 				if (list.get((int) indexList.get(i)).getCourseCode().equals(name)) {
 					System.out.println("Enter exam mark: ");
@@ -316,10 +337,13 @@ public class StudentCourseManager {
 			System.out.println("Invalid student.");
 	}
 	
-	// Asks user for student name and course, then lets user input marks for each coursework component
+	/**
+	 * Allows user to input a student's coursework marks of a course.
+	 * Asks user to input student ID and course code, then lets user input the coursework marks for each sub-component.
+	 */
 	public void inputCourseworkMark () {
 		System.out.println("Enter student ID: ");
-		String student = read.nextLine().toUpperCase();
+		String student = read.nextLine();
 		
 		if (byStudent.containsKey(student)) {
 			LinkedList indexList = byStudent.get(student);
@@ -365,9 +389,14 @@ public class StudentCourseManager {
 		}
 	}
 	
+	/**
+	 * Displays the percentage of student getting each grade.
+	 * Asks user to input course code.
+	 * Prints error message if exam or coursework marks are not entered yet and returns.
+	 */
 	public void printCourseStatistics() {
 		System.out.println("Enter course code: ");
-		String course = read.next().toUpperCase(); read.nextLine();
+		String course = read.next().toUpperCase();
 		int[] count = {0,0,0,0,0}; //[A,B,C,D,F]
 		int mark, grade;
 		
@@ -381,13 +410,9 @@ public class StudentCourseManager {
 			
 			switch(choice) {
 			case 1: 
-				for (int i = 0; i < indexList.size(); i++) 
-				{
+				for (int i = 0; i < indexList.size(); i++) {
 					mark = calTotalMarks(list.get((int) indexList.get(i)));
-					if (mark == -1) {
-						System.out.println("Mark for student " + list.get((int) indexList.get(i)).getStudentID() + " have not been entered yet.");
-						return;
-					}
+					if (mark == -1) return;
 					grade = convertToGrade(mark);
 					if (grade > 0) {
 						count[grade-1]++;
@@ -396,8 +421,7 @@ public class StudentCourseManager {
 				break;
 				
 			case 2: 
-				for (int i = 0; i < indexList.size(); i++) 
-				{
+				for (int i = 0; i < indexList.size(); i++) {
 					mark = list.get((int) indexList.get(i)).getExamResult();
 					if (mark == -1) {
 						System.out.println("Exam marks not entered yet.");
@@ -431,11 +455,11 @@ public class StudentCourseManager {
 			
 			int numOfGrades = count[0] + count[1] + count[2] + count[3] + count[4];
 			System.out.println("Statistics for " + course);
-			System.out.println("A: " + (count[0]*100/numOfGrades) + "%");
-			System.out.println("B: " + (count[1]*100/numOfGrades) + "%");
-			System.out.println("C: " + (count[2]*100/numOfGrades) + "%");
-			System.out.println("D: " + (count[3]*100/numOfGrades) + "%");
-			System.out.println("F: " + (count[4]*100/numOfGrades) + "%");
+			System.out.println("A: " + (count[0]/numOfGrades)*100 + "%");
+			System.out.println("B: " + (count[1]/numOfGrades)*100 + "%");
+			System.out.println("C: " + (count[2]/numOfGrades)*100 + "%");
+			System.out.println("D: " + (count[3]/numOfGrades)*100 + "%");
+			System.out.println("F: " + (count[4]/numOfGrades)*100 + "%");
 		}
 		
 		else {
@@ -446,13 +470,17 @@ public class StudentCourseManager {
 		
 	}
 	
-	// DONE
+	/**
+	 * Displays student transcript containing student name, CPGA, grades and component marks for each course registered.
+	 * Prints results not available message if marks have not yet been entered.
+	 * @param profile The student's ID.
+	 */
 	public void printStudentTranscript(String profile) {
 		String student = profile;
 		if(student == null)
 		{
 			System.out.println("Enter student ID: ");
-			student = read.next().toUpperCase(); read.nextLine();
+			student = read.next().toUpperCase();
 		}
 
 		int mark;
@@ -509,7 +537,13 @@ public class StudentCourseManager {
 		else System.out.println("Invalid student.");
 	}
 	
-	public double calCGPA(String student) {
+	/**
+	 * Calculates the CGPA of a student.
+	 * @param student
+	 * @return
+	 */
+	public double calCGPA(String student) 
+	{
 		double totalGPA = 0;
 		int mark;
 		int n = 0;
@@ -517,7 +551,8 @@ public class StudentCourseManager {
 			LinkedList indexList = byStudent.get(student);
 			for (int i = 0; i < indexList.size(); i++) {
 				mark = calTotalMarks(list.get((int) indexList.get(i)));
-				if (mark >= 0) {
+				if (mark >= 0) 
+				{
 					totalGPA = totalGPA + convertToGPA(mark);
 					n++;
 				}
