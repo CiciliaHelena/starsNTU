@@ -6,56 +6,63 @@ import java.util.*;
 public class Course implements Serializable
 {
 	/**
-	 * courseCode is a string with 2 characters of abbreviation of courseName in front, 
-	 * followed by 4 numbers indicating their level and ID
+	 * courseCode is a string with 2 characters of abbreviation of course major in front, 
+	 * followed by 4 numbers indicating their level and ID.
 	 */
 	private String courseCode;
-	
+
 	/**
-	 * Name of the course
+	 * Name of the course to easily identify the course.
 	 */
 	private String courseName;
-	
+
 	/**
-	 * Coordinator of the course
+	 * Name of course coordinator. It is the attribute name in the Professor object.
 	 */
 	private String coordinator;
-	
+
 	/**
-	 * indicating whether the course has a lecture
-	 * has a tutorial
-	 * has a lab
+	 * Indicates whether the course has lecture, tutorial and lab.
+	 * Number of groups are stored in the following order: [lecture, tutorial, lab]
+	 * 0 indicates that it is not part of the course delivery structure of the course.
+	 * Other positive integer indicates the number of groups.
 	 */
-	private int[] numOfGroup = new int[3];  // [lec, tut, lab]
-	
-	private Map <String, Integer> tutGroups = new Hashtable<String, Integer>();  // <index, vacancy>
-	private Map <String, Integer> labGroups = new Hashtable<String, Integer>();  // <index, vacancy>
-	private Map <String, Integer> courseworkComponent = new Hashtable<String, Integer>();  // <type, weightage>
+	private int[] numOfGroup = new int[3]; 
 	
 	/**
-	 * number of students that could still join the course
+	 * All the tutorial groups for this course in the format <index, vacancy>
+	 * null if this course does not have tutorials.
+	 */
+	private Map <String, Integer> tutGroups = new Hashtable<String, Integer>();
+	
+	/** 
+	 * All the lab groups for this course in the format <index, vacancy>
+	 * null if this course does not have labs.
+	 */
+	private Map <String, Integer> labGroups = new Hashtable<String, Integer>();
+	
+	/**
+	 * Number of available slots left for this course.
 	 */
 	private int overallVacancy;
-<<<<<<< HEAD
 	
 	/**
-	 * number of components of grade
+	 * Capacity of this course.
 	 */
-=======
 	private int initialVacancy;
->>>>>>> d0a4c8aa5ca4574ffb905c90e59ba711e4ae1e4b
+	
+	/**
+	 * The exam weightage of this course out of 100.
+	 */
 	private int examWeightage;
 	
-	
-
-
-<<<<<<< HEAD
-
 	/**
-	 * Constructor of Course, will contruct based on the parameters passed
+	 * The coursework components of this course and its respective weightage in the format <sub-component, weightage>
+	 * If this course only has one main coursework, courseworkComponent only contains for key-value pair <"Coursework", 100>
 	 */
-=======
->>>>>>> d0a4c8aa5ca4574ffb905c90e59ba711e4ae1e4b
+	private Map <String, Integer> courseworkComponent = new Hashtable<String, Integer>();  // <type, weightage>
+
+
 	public Course(String courseCode,String courseName,String coordinator,int[] numOfGroup,Map <String, Integer> tutGroups,Map <String, Integer> labGroups,int overallVacancy,int examWeightage, Map <String, Integer> courseworkComponent)
 	{
 		this.courseCode = courseCode;
@@ -71,100 +78,113 @@ public class Course implements Serializable
 	}
 
 	/**
-	 * getter of Course.courseCode()
+	 * get the course code of this course
+	 * @return this course's code in String type
 	 */
 	public String getCourseCode() {
 		return courseCode;
 	}
 	
 	/**
-	 * getter of Course.getCourseName()
+	 *get the course name of this course
+	 *@return this course's name in String type
 	 */
 	public String getCourseName() {
 		return courseName;
 	}
 
-<<<<<<< HEAD
 	/**
-	 * getter of Course.vacancy()
+	 * get the overall available vacancy of this course
+	 * @return this course's overall vacancy in int type
 	 */
-	public int getVacancy() {
-=======
 	public int getOverallVacancy() {
->>>>>>> d0a4c8aa5ca4574ffb905c90e59ba711e4ae1e4b
 		return overallVacancy;
 	}
 	
+	/**
+	 * get the initial vacancy of this course
+	 * @return this course's initial vacancy in int type
+	 */
 	public int getInitialVacancy() {
 		return initialVacancy;
 	}
 
 	/**
-	 * getter of Course.coordinator()
+	 * get the coordinator of this course
+	 * @return this course's coordinator name in String type
 	 */
 	public String getCoordinator() {
 		return coordinator;
 	}
 
 	/**
-	 * getter of Course.tutGroups()
+	 * get all the tutorial group available of this course
+	 * @return this course's list of tutorial groups in Map structure
 	 */
 	public Map getTutGroup() {
 		return tutGroups;
 	}
 
 	/**
-	 * getter of Course.labGroups()
+	 * get all the lab group available of this course
+	 * @return this course's list of lab groups in Map structure
 	 */
 	public Map getLabGroup() {
 		return labGroups;
 	}
 
 	/**
-	 * getter of Course.numOfGroup()
+	 * get the number of both tutorial and lab groups available of this course
+	 * @return this course's number of group for both lab and tutorial in array of int type
 	 */
 	public int[] getNumOfGroup() {
 		return numOfGroup;
 	}
 
 	/**
-	 * getter of Course.courseworkComponent()
+	 * get the coursework component of this course
+	 * @return this course's coursework component in Map structure
 	 */
 	public Map<String, Integer> getCourseworkComponent() {
 		return courseworkComponent;
 	}
 
 	/**
-	 * getter of Course.examWeightage()
+	 * get the exam weightage of this course
+	 * @return this course's exam weightage in int type
 	 */
 	public int getExamWeightage() {
 		return examWeightage;
 	}
 	
 	/**
-	 * sets vacancy to a new value
+	 * set the initial overall vacancy for this course
+	 * @param v this course's vacancy in int type
 	 */
 	public void setVacancy(int v) {
 		overallVacancy = v;
 	}
 	
 	/**
-	 * sets tutorial vacancy of a specific tutorial group to a new value
+	 * set the tutorial's vacancy of this course
+	 * @param t the name of the tutorial group
+	 * @param v the vacancy of the tutorial group
 	 */
 	public void setTutVacancy(String t, int v) {
 		tutGroups.put(t, v);
 	}
 	
 	/**
-	 * sets lab vacancy of a specific lab group to a new value
+	 * set the lab vacancy of this course
+	 * @param l the name of the lab group
+	 * @param v the vacancy of the lab group
 	 */
 	public void setLabVacancy(String l, int v) {
 		labGroups.put(l, v);
 	}
 
 	/**
-	 * overrides the usual toString method for Course class
-	 * rturns a partitioned data for better parameter passing
+	 * @return the course instance in the format of " courseCode : courseName;"
 	 */
 	@Override
 	public String toString(){
