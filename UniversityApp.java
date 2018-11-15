@@ -15,7 +15,7 @@ public class UniversityApp
 		LoginManager loginmanager = LoginManager.initiate();
 
 		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-		System.out.println("           Welcome to NTU course registration system");
+		System.out.println("           Welcome to NTU Course Registration System");
 		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 		while(profile == null)
 		{
@@ -28,7 +28,7 @@ public class UniversityApp
 			if(profile != null && profile.equals("admin"))
 			{
 				System.out.println("------------------------------------------------------------------");
-				System.out.println("             You are log-in as an administrator.");
+				System.out.println("             You are logged in as an administrator.");
 				System.out.println("------------------------------------------------------------------\n");
 				do
 				{
@@ -56,11 +56,12 @@ public class UniversityApp
 								break;
 						case 2: coursemanager.printCourses();
 								break;
-						case 3: studentmanager.printStudents();
-								String sID = studentmanager.addStudent();
+						case 3: String sID = studentmanager.addStudent();
+								studentmanager.printStudents();
 								studentcoursemanager.updateStudentTM(sID); // (By CY) for StudentCourse pls keep this
 								break;
 						case 4: String cC = coursemanager.addCourse();
+								coursemanager.printCourses();
 								studentcoursemanager.updateCourseTM(cC); // (By CY) for StudentCourse pls keep this
 								break;
 						case 5: studentcoursemanager.registerCourse(null);
@@ -78,7 +79,7 @@ public class UniversityApp
 						case 11:studentcoursemanager.printStudentTranscript(null);
 								break;
 						case 12:profile = null;
-								System.out.println("Log-out successfully.");
+								System.out.println("Log out successfully.");
 								break;
 						default:break;
 					}
@@ -90,7 +91,7 @@ public class UniversityApp
 			if(profile != null)
 			{
 				System.out.println("------------------------------------------------------------------");
-				System.out.println("You are log-in as "+studentmanager.getStudent(profile).getName()+".");
+				System.out.println("You are logged in as "+studentmanager.getStudent(profile).getName()+".");
 				System.out.println("------------------------------------------------------------------\n");
 				do
 				{
@@ -122,7 +123,7 @@ public class UniversityApp
 						case 6:studentcoursemanager.printStudentTranscript(profile);
 								break;
 						case 7:profile = null;
-								System.out.println("Log-out successfully.");
+								System.out.println("Log out successfully.");
 								break;
 						default:break;
 					}

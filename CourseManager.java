@@ -23,11 +23,11 @@ public class CourseManager
 		{
 			list = (ArrayList) IOE.readSerializedObject(filename);
 			if(list == null) list = new ArrayList<Course>();
-			for (int i = 0; i < list.size(); i++)
+			/*for (int i = 0; i < list.size(); i++)
 			{
 				Course c = (Course) list.get(i);
 				System.out.println(c);
-			}
+			}*/
 		}
 		catch(Exception e){System.out.println( "Exception CourseManager() >> "+e.getMessage());}
 		System.out.println("Load course data, done.\n");
@@ -178,7 +178,6 @@ public class CourseManager
 			list.add(course);
 			IOE.writeSerializedObject(filename, list);
 			System.out.println("Course succesfully added!");
-			printCourses();
 			return courseCode;
 		}
 		catch ( Exception e ){System.out.println( "Exception addCourse() >> " + e.getMessage());}

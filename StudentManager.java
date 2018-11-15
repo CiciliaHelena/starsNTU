@@ -57,7 +57,6 @@ public class StudentManager
 			list.add(student);
 			IOE.writeSerializedObject(filename, list);
 			System.out.println("Successfully added student.");
-			printStudents();
 			return sID;
 		}
 		catch ( Exception e ){
