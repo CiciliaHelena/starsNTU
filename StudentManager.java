@@ -6,11 +6,29 @@ import java.util.Scanner;
 public class StudentManager
 { //this is a control class
 	protected ArrayList<Student> list = new ArrayList<Student>();
+	
+	/**
+	 * point to a file with pre-existing data of Students
+	 */
 	private String filename = "student.dat";
 	private Scanner scan = new Scanner(System.in);
+	
+	/**
+	 * a string of identification number
+	 * various Student details can be extracted from the identification number
+	 * by partitioning it
+	 * is not case sensitive
+	 */
 	private String studentID;
+	
+	/**
+	 * pointer to read the file, initialized to null
+	 */
 	private static StudentManager theinstance = null;
 
+	/**
+	 * Load student manager and read files to prepare for future edits
+	 */
 	private StudentManager()
 	{
 		System.out.println("Loading student data... Please wait...");
@@ -28,6 +46,9 @@ public class StudentManager
 		System.out.println("Load student data, done.\n");
 	}
 
+	/**
+	 * re-initialize the StudentManager pointer to null
+	 */
 	public static StudentManager initiate() 
 	{
 		if(theinstance == null)
@@ -35,6 +56,10 @@ public class StudentManager
 		return theinstance;
 	}
 
+	/**
+	 * adds Student, method will ask for inputs for the parameters 
+	 * to pass to the Student constructor
+	 */
 	public String addStudent()
 	{
 		System.out.print("Adding student. ");
@@ -71,6 +96,9 @@ public class StudentManager
 		return "NA";
 	}
 
+	/**
+	 * delete Student by its ID, if it exists in the list
+	 */
 	public void deleteStudent()
 	{
 		System.out.print("Enter student matric to delete: ");
@@ -85,6 +113,9 @@ public class StudentManager
 		System.out.println("Student not found.");
 	}
 	
+	/**
+	 * get the Student object that has matching studentID with the parameter 
+	 */
 	public Student getStudent(String profile)
 	{
 		studentID = profile;
@@ -100,6 +131,9 @@ public class StudentManager
 		return null;
 	}
 	
+	/**
+	 * get the Student name that has matching StudentID with the parameter
+	 */
 	public String getStudentName(String sID)
 	{
 		for(Student temp: list)
@@ -109,6 +143,9 @@ public class StudentManager
 		return "NA";
 	}
 
+	/**
+	 * print the list of all Student with some formatting
+	 */
 	public void printStudents()
 	{
 		System.out.println("\nComplete list of students");

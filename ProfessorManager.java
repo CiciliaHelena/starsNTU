@@ -16,10 +16,11 @@ public class ProfessorManager {
 	 */
 	String filename = "professor.txt";
 	
-	/**
-	 * 
-	 */
 	protected ArrayList<Professor> al = new ArrayList<Professor>();
+	
+	/**
+	 * pointer of current thread, initialized to null
+	 */
 	private static ProfessorManager theinstance = null;
 
 	/**

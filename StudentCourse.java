@@ -3,6 +3,7 @@
 import java.io.Serializable;
 
 public class StudentCourse implements Serializable {
+	
 	private String courseCode;
 	private String tutGroup; // "NA" to indicate class type not conducted for the course
 	private String labGroup; // "NA" to indicate class type not conducted for the course

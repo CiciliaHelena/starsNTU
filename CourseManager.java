@@ -9,13 +9,33 @@ import java.util.Set;
 public class CourseManager
 {
 	protected ArrayList<Course> list = new ArrayList<Course>();
+	
+	/**
+	 * points to a pre-existing data of Courses
+	 */
 	private String filename = "course.dat";
 	private Scanner scan = new Scanner(System.in);
+	
+	/**
+	 * courseCode is a string with 2 characters of abbreviation of courseName in front, 
+	 * followed by 4 numbers indicating their level and ID
+	 */
 	private String courseCode;
+	
+	/**
+	 * pointer to read the file, initialized to null
+	 */
 	private static CourseManager theinstance = null;
+	
+	/**
+	 * initializes ProfessorManager class for use
+	 */
 	private static ProfessorManager professormanager = ProfessorManager.initiate();
 
-
+	/**
+	 * Initializes CourseManager to load coursedata for use in the future
+	 * Initializes the control class
+	 */
 	private CourseManager()
 	{
 		System.out.println("Loading course data... Please wait...");
@@ -33,6 +53,9 @@ public class CourseManager
 		System.out.println("Load course data, done.\n");
 	}
 
+	/**
+	 * re-initiates CourseManager to null
+	 */
 	public static CourseManager initiate()
 	{
 		if(theinstance == null)
@@ -40,6 +63,10 @@ public class CourseManager
 		return theinstance;
 	}
 
+	/**
+	 * this method adds a course by prompting the user for parameters to pass
+	 * for the Couse constructor then passing it to the constructor
+	 */
 	public String addCourse()
 	{	
 		String courseCode;
@@ -201,6 +228,9 @@ public class CourseManager
 		return "NA";
 	}
 
+	/**
+	 * this method prompt the user for a coursecode to delete, then deletes it
+	 */
 	public void deleteCourse()
 	{
 		System.out.print("Enter course code to delete: ");
@@ -215,6 +245,10 @@ public class CourseManager
 		System.out.println("Course not found!");
 	}
 
+	/**
+	 * this method prompts the user for a course code, 
+	 * then displays the vacancy of that course
+	 */
 	public void checkVacancy()
 	{
 		System.out.print("Enter course code to check the vacancy: ");
@@ -225,6 +259,9 @@ public class CourseManager
 		System.out.println("Course not found!");
 	}
 	
+	/**
+	 * gets the vacancy of a course given its coursecode
+	 */
 	public int getVacancy(String courseCode){ // for StudentCourse
 		for(Course temp: list)
 			if(courseCode.equals(temp.getCourseCode())) { 
