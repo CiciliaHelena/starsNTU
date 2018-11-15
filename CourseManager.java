@@ -239,7 +239,8 @@ public class CourseManager
 		return keys;
 	}
 	
-	public int getNumOfComponent(String courseCode) { // for StudentCourse
+	public int getNumOfComponent(String courseCode)
+	{ // for StudentCourse
 		for(Course temp: list)
 			if(courseCode.equals(temp.getCourseCode())){
 				return temp.getCourseworkComponent().size();
@@ -268,7 +269,8 @@ public class CourseManager
 		catch ( Exception e ){System.out.println( "Exception printCourses() >> " + e.getMessage());}
 	}
 	
-	public Set getTutGroup (String courseCode) { // for StudentCourse
+	public Set getTutGroup (String courseCode)
+	{ // for StudentCourse
 		for(Course temp: list) {
 			if(courseCode.equals(temp.getCourseCode())) 
 				return temp.getTutGroup().keySet();
@@ -276,7 +278,8 @@ public class CourseManager
 		return null;
 	}
 
-	public Set getLabGroup (String courseCode) { // for StudentCourse
+	public Set getLabGroup (String courseCode)
+	{ // for StudentCourse
 		for(Course temp: list) {
 			if(courseCode.equals(temp.getCourseCode())) 
 				return temp.getLabGroup().keySet();
@@ -284,7 +287,8 @@ public class CourseManager
 		return null;
 	}
 	
-	public void updateVacancy(String courseCode, String tutGroup, String labGroup) { // for StudentCourse // "NA" for non tut or lab groups
+	public void updateVacancy(String courseCode, String tutGroup, String labGroup)
+	{ // for StudentCourse // "NA" for non tut or lab groups
 		for(Course temp: list) {
 			if(courseCode.equals(temp.getCourseCode())) {
 				temp.setVacancy(temp.getVacancy()-1);
@@ -305,27 +309,27 @@ public class CourseManager
 		}
 	}
 	
-	public int getExamWeightage(String courseCode) {
-		for(Course temp: list) {
+	public int getExamWeightage(String courseCode)
+	{
+		for(Course temp: list)
 			if(courseCode.equals(temp.getCourseCode())) 
 				return temp.getExamWeightage();
-		}
 		return -1;
 	}
 
-		public String getCourseName(String courseCode) {
-		for(Course temp: list) {
+	public String getCourseName(String courseCode)
+	{
+		for(Course temp: list)
 			if(courseCode.equals(temp.getCourseCode())) 
 				return temp.getCourseName();
-		}
 		return "No such course";
 	}
 
-	public Map<String, Integer> getCourseworkComponent(String courseCode) {
-		for(Course temp: list) {
+	public Map<String, Integer> getCourseworkComponent(String courseCode)
+	{
+		for(Course temp: list)
 			if(courseCode.equals(temp.getCourseCode())) 
 				return temp.getCourseworkComponent();
-		}
 		return null;
 	}
 
