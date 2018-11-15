@@ -146,7 +146,10 @@ public class StudentCourseManager {
 		// student or course doesn't exist, cancel registration
 		else
 		{ 
-			System.out.println("Invalid student or course.");
+			if (!byCourse.containsKey(course))
+				System.out.println("Invalid course.");
+			if (!byStudent.containsKey(student))
+				System.out.println("Invalid student.");
 		}
 	}
 	
@@ -253,12 +256,14 @@ public class StudentCourseManager {
 				if (list.get((int) indexList.get(i)).getCourseCode().equals(name)) {
 					System.out.println("Enter exam mark: ");
 					int mark = IOE.scint();
-					//int w = coursemanager.getExamWeightage(name);
+					while (mark < 0 || mark > 100) {
+				    	System.out.println("Invalid mark. Please re-enter.");
+				    	System.out.println("Enter exam mark: ");
+					    mark = IOE.scint();
+				    }
 					list.get((int) indexList.get(i)).setExamResult(mark);
 					IOE.writeSerializedObject(filename, list);
 					System.out.println("Results saved.");
-					//System.out.println("test " + list.get((int) indexList.get(i)).getExamResult());
-					//System.out.println(list);
 					return;
 				}
 			}	
@@ -286,7 +291,6 @@ public class StudentCourseManager {
 					// check if coursework component has been entered
 					if (coursemanager.getCourseworkComponent(course) != null) {
 						Map<String, Integer> componentWeightage = coursemanager.getCourseworkComponent(course);
-						//int w = coursemanager.getExamWeightage(course);
 						int[] marks = new int[componentWeightage.size()];
 						int j = 0;
 						int mark;
@@ -295,16 +299,16 @@ public class StudentCourseManager {
 						for (Map.Entry<String, Integer> entry : componentWeightage.entrySet()) {
 						    System.out.println("Enter mark for " + entry.getKey() + ":");
 						    mark = IOE.scint();
+						    while (mark < 0 || mark > 100) {
+						    	System.out.println("Invalid mark. Please re-enter.");
+						    	System.out.println("Enter mark for " + entry.getKey() + ":");
+							    mark = IOE.scint();
+						    }
 						    marks[j++] = mark;
-						    //marks[j++] = ((mark * (int) entry.getValue() * (100-w))/10000); 
-						    //System.out.println("- - -Saved mark = " + marks[j-1]);
-						    //System.out.println("- - -Weightage = " + entry.getValue());
 						}
 						list.get((int) indexList.get(i)).setCourseworkResult(marks);
 						IOE.writeSerializedObject(filename, list);
 						System.out.println("Results saved.");
-						//System.out.println("test " + list.get((int) indexList.get(i)).getCourseworkResult()[0]);
-						//System.out.println(list);
 						return;
 					}
 					System.out.println("No information about coursework component.");
@@ -315,12 +319,11 @@ public class StudentCourseManager {
 			return;
 		}
 		else {
-			System.out.println("Invalid student or course.");
+			System.out.println("Invalid student.");
 			return;
 		}
 	}
 	
-	// DONE
 	public void printCourseStatistics() {
 		System.out.println("Enter course code: ");
 		String course = read.next().toUpperCase();

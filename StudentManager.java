@@ -28,7 +28,7 @@ public class StudentManager
 		System.out.println("Load student data, done.\n");
 	}
 
-	public static StudentManager initiate()
+	public static StudentManager initiate() 
 	{
 		if(theinstance == null)
 			theinstance = new StudentManager();
@@ -40,6 +40,12 @@ public class StudentManager
 		System.out.print("Adding student. ");
 		System.out.println("Enter the student ID: ");
 		String sID = scan.next().toUpperCase(); scan.nextLine();
+		while (sID.length() < 9 || sID.charAt(0) != 'U')
+		{
+			System.out.println("Invalid student ID. Please enter ID of at least 9 characters long starting with 'U'.");
+			System.out.println("Re-enter student ID: ");
+			sID = scan.next().toUpperCase(); scan.nextLine();
+		}
 		System.out.println("Enter the student name: ");
 		String n = scan.nextLine();
 		System.out.println("Enter a temporary password: ");

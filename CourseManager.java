@@ -41,7 +41,8 @@ public class CourseManager
 	}
 
 	public String addCourse()
-	{	String courseCode;
+	{	
+		String courseCode;
 		String courseName;
 		String coordinator;
 		int[] numOfGroup = new int[3];  // [lec, tut, lab]
@@ -56,8 +57,13 @@ public class CourseManager
 		System.out.print("Adding course. ");
 		Scanner read = new Scanner(System.in);
 		System.out.println("Enter course code: ");
-		courseCode = read.next().toUpperCase(); 
-		read.nextLine();
+		courseCode = read.next().toUpperCase(); read.nextLine();
+		while(courseCode.length() != 6 || courseCode.charAt(0) != 'C' || courseCode.charAt(1) != 'E')
+		{
+			System.out.println("Invalid course code. Please enter course code with 6 characters starting with 'CE'.");
+			System.out.println("Re-enter course code: ");
+			courseCode = read.next().toUpperCase(); read.nextLine();
+		}
 		System.out.println("Enter course name: ");
 		courseName = read.nextLine().toUpperCase();
 		System.out.println("Select course coordinator: ");
@@ -97,7 +103,7 @@ public class CourseManager
 				for(int i = 0; i < n; i++)
 				{
 					System.out.print("Please enter tutorial group "+(i+1)+" index: ");
-					temp = read.next();
+					temp = read.next(); read.nextLine();
 					System.out.print("Please enter tutorial group "+(i+1)+" vacancy: ");
 					l = IOE.scint();
 					tutGroups.put(temp.toUpperCase(), l);
@@ -106,7 +112,7 @@ public class CourseManager
 				if(k < overallVacancy)
 				{
 					System.out.println("Total vacancy of lab group must be not less than overall vacancy!");
-					System.out.println("Please re-enter");
+					System.out.println("Please re-enter.");
 				}
 				else okflag = true;
 			}
@@ -125,7 +131,7 @@ public class CourseManager
 				for(int i = 0; i < n; i++)
 				{
 					System.out.print("Please enter lab group "+(i+1)+" index: ");
-					temp = read.next();
+					temp = read.next(); read.nextLine();
 					System.out.print("Please enter lab group "+(i+1)+" vacancy: ");
 					l = IOE.scint();
 					labGroups.put(temp.toUpperCase(), l);
@@ -134,7 +140,7 @@ public class CourseManager
 				if(k < overallVacancy)
 				{
 					System.out.println("Total vacancy of lab group must not be less than overall vacancy!");
-					System.out.println("Please re-enter");
+					System.out.println("Please re-enter.");
 				}
 				else okflag = true;
 			}
@@ -146,9 +152,20 @@ public class CourseManager
 			total = 0;
 			System.out.print("Enter the exam weightage: "); 
 			examWeightage = IOE.scint();
+			while (examWeightage >= 100)
+			{
+				System.out.println("Exam weightage has to be smaller than 100. Please try again.");
+				System.out.print("Enter the exam weightage: "); 
+				examWeightage = IOE.scint();
+			}
 			System.out.println("Enter the number of coursework components in this course: ");
 			n = IOE.scint();
-			read.nextLine();
+			while (n < 1)
+			{
+				System.out.println("There should be at least one coursework component. Please try again.");
+				System.out.println("Enter the number of coursework components in this course: ");
+				n = IOE.scint();
+			}
 			if (n == 1) {
 				courseworkComponent.put("Coursework", 100);
 				total = 100;
@@ -156,14 +173,14 @@ public class CourseManager
 			else
 				for(int i = 0 ;i < n; i++)
 				{
-					System.out.print("Key in the name of component "+(i+1)+" : ");
+					System.out.print("Key in the name of component "+(i+1)+": ");
 					temp = read.nextLine();
-					System.out.print("Key in the weightage of component "+(i+1)+" : ");
+					System.out.print("Key in the weightage of component "+(i+1)+": ");
 					lol = IOE.scint();
 					courseworkComponent.put(temp, lol);
 					total += lol;
 				}
-			if(total != 100) System.err.println("Total percentage must be equal to 100!");
+			if(total != 100) System.out.print("Total percentage of coursework weightage must be equal to 100!"); 
 		}
 		while(total != 100);
 
