@@ -41,7 +41,7 @@ public class CourseManager
 		System.out.println("Loading course data... Please wait...");
 		try
 		{
-			list = (ArrayList) IOE.readSerializedObject(filename);
+				list = (ArrayList) IOE.readSerializedObject(filename);
 			if(list == null) list = new ArrayList<Course>();
 			/*for (int i = 0; i < list.size(); i++)
 			{
@@ -218,14 +218,14 @@ public class CourseManager
 		{
 			for(Course temp1:list)
 				if(courseCode.equals(temp1.getCourseCode()))
-					{System.out.println("Course already exist!"); return "NA";}
+					{System.out.println("Course already exist!"); return null;}
 			list.add(course);
 			IOE.writeSerializedObject(filename, list);
 			System.out.println("Course succesfully added!");
 			return courseCode;
 		}
 		catch ( Exception e ){System.out.println( "Exception addCourse() >> " + e.getMessage());}
-		return "NA";
+		return null;
 	}
 
 	/**
@@ -255,7 +255,12 @@ public class CourseManager
 		courseCode = scan.next().toUpperCase();
 		for(Course temp: list)
 			if(courseCode.equals(temp.getCourseCode()))
-				{System.out.println("Vacancy for "+courseCode+": "+temp.getVacancy()); return;}
+			{
+				System.out.println("Overall vacancy for "+courseCode+": "+temp.getOverallVacancy() + '/' + temp.getInitialVacancy());
+				checkAvailableTutGroup(courseCode);
+				checkAvailableLabGroup(courseCode);
+				return;
+			}
 		System.out.println("Course not found!");
 	}
 	
@@ -265,43 +270,46 @@ public class CourseManager
 	public int getVacancy(String courseCode){ // for StudentCourse
 		for(Course temp: list)
 			if(courseCode.equals(temp.getCourseCode())) { 
-				return temp.getVacancy();
+				return temp.getOverallVacancy();
 			}
 		return -1;
 	}
 	
-	public ArrayList checkAvailableTutGroup(String courseCode) // for StudentCourse
+	public Map checkAvailableTutGroup(String courseCode) // for StudentCourse
 	{
-		ArrayList<String> keys = new ArrayList();
 		for(Course temp: list)
 			if(courseCode.equals(temp.getCourseCode())){
 				Map<String, Integer> groups = temp.getTutGroup();
 				try {
-					for(Map.Entry<String, Integer> e : groups.entrySet()) {
-					    if (e.getValue() != 0)			     
-					    	keys.add(e.getKey());
+					if (groups != null)
+						System.out.println("\nTutorial groups");
+					for(Map.Entry<String, Integer> e : groups.entrySet()) 
+					{
+						System.out.format("%-10s %-10s%n", e.getKey(), e.getValue());
 					}
+					return groups;
 				}
 				catch (Exception e) {}
 			}
-		return keys;
+		return null;
 	}
 	
-	public ArrayList checkAvailableLabGroup(String courseCode) // for StudentCourse
+	public Map checkAvailableLabGroup(String courseCode) // for StudentCourse
 	{
-		ArrayList<String> keys = new ArrayList();
 		for(Course temp: list)
 			if(courseCode.equals(temp.getCourseCode())){
 				Map<String, Integer> groups = temp.getLabGroup();
 				try {
+					if (groups != null)
+						System.out.println("\nLab groups");
 					for(Map.Entry<String, Integer> e : groups.entrySet()) {
-					    if (e.getValue() != 0)			     
-					    	keys.add(e.getKey());
+						System.out.format("%-10s %-10s%n", e.getKey(), e.getValue());
 					}
+					return groups;
 				}
 				catch (Exception e) {}
 			}
-		return keys;
+		return null;
 	}
 	
 	public int getNumOfComponent(String courseCode)
@@ -342,7 +350,10 @@ public class CourseManager
 	{ // for StudentCourse
 		for(Course temp: list) {
 			if(courseCode.equals(temp.getCourseCode())) 
-				return temp.getTutGroup().keySet();
+				if (temp.getTutGroup() != null)
+					return temp.getTutGroup().keySet();
+				else
+					return null;
 		}
 		return null;
 	}
@@ -351,25 +362,29 @@ public class CourseManager
 	{ // for StudentCourse
 		for(Course temp: list) {
 			if(courseCode.equals(temp.getCourseCode())) 
-				return temp.getLabGroup().keySet();
+				if (temp.getLabGroup() != null)
+					return temp.getLabGroup().keySet();
+				else
+					return null;
 		}
 		return null;
 	}
 	
 	public void updateVacancy(String courseCode, String tutGroup, String labGroup)
-	{ // for StudentCourse // "NA" for non tut or lab groups
+	{ // for StudentCourse 
+	  // "NA" for non tut or lab groups
 		for(Course temp: list) {
 			if(courseCode.equals(temp.getCourseCode())) {
-				temp.setVacancy(temp.getVacancy()-1);
+				temp.setVacancy(temp.getOverallVacancy()-1);
 				if (!tutGroup.equals("NA")) {
 					if (temp.getTutGroup().containsKey(tutGroup)) {
-						temp.setTutVacancy(tutGroup, (int) temp.getTutGroup().get(tutGroup)); 
+						temp.setTutVacancy(tutGroup, (int) temp.getTutGroup().get(tutGroup)-1); 
 					}
 					else System.out.println("Invalid tutorial group.");
 				}
 				if (!labGroup.equals("NA")) {
 					if (temp.getLabGroup().containsKey(labGroup)) {
-						temp.setLabVacancy(labGroup, (int) temp.getLabGroup().get(labGroup)); 
+						temp.setLabVacancy(labGroup, (int) temp.getLabGroup().get(labGroup)-1); 
 					}
 					else System.out.println("Invalid lab group.");
 				}

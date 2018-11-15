@@ -17,7 +17,7 @@ public class IOE
 		while(!scan.hasNextInt())
 		{
 			scan.nextLine();
-			System.out.println("Integers only, please.");
+			System.err.println("Integers only, please.");
 		}
 		return scan.nextInt();
 	}

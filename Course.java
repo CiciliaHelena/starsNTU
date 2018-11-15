@@ -36,19 +36,26 @@ public class Course implements Serializable
 	 * number of students that could still join the course
 	 */
 	private int overallVacancy;
+<<<<<<< HEAD
 	
 	/**
 	 * number of components of grade
 	 */
+=======
+	private int initialVacancy;
+>>>>>>> d0a4c8aa5ca4574ffb905c90e59ba711e4ae1e4b
 	private int examWeightage;
 	
 	
 
 
+<<<<<<< HEAD
 
 	/**
 	 * Constructor of Course, will contruct based on the parameters passed
 	 */
+=======
+>>>>>>> d0a4c8aa5ca4574ffb905c90e59ba711e4ae1e4b
 	public Course(String courseCode,String courseName,String coordinator,int[] numOfGroup,Map <String, Integer> tutGroups,Map <String, Integer> labGroups,int overallVacancy,int examWeightage, Map <String, Integer> courseworkComponent)
 	{
 		this.courseCode = courseCode;
@@ -58,6 +65,7 @@ public class Course implements Serializable
 		this.tutGroups = tutGroups;
 		this.labGroups = labGroups;
 		this.overallVacancy = overallVacancy;
+		this.initialVacancy = overallVacancy;
 		this.examWeightage = examWeightage;
 		this.courseworkComponent = courseworkComponent;
 	}
@@ -76,11 +84,19 @@ public class Course implements Serializable
 		return courseName;
 	}
 
+<<<<<<< HEAD
 	/**
 	 * getter of Course.vacancy()
 	 */
 	public int getVacancy() {
+=======
+	public int getOverallVacancy() {
+>>>>>>> d0a4c8aa5ca4574ffb905c90e59ba711e4ae1e4b
 		return overallVacancy;
+	}
+	
+	public int getInitialVacancy() {
+		return initialVacancy;
 	}
 
 	/**
@@ -151,8 +167,7 @@ public class Course implements Serializable
 	 * rturns a partitioned data for better parameter passing
 	 */
 	@Override
-	public String toString()
-	{
+	public String toString(){
 		return courseCode+" : "+courseName;
 	}
 }
