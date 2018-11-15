@@ -12,6 +12,7 @@ public class Course implements Serializable
 	private Map <String, Integer> tutGroups = new Hashtable<String, Integer>();  // <index, vacancy>
 	private Map <String, Integer> labGroups = new Hashtable<String, Integer>();  // <index, vacancy>
 	private int overallVacancy;
+	private int initialVacancy;
 	private int examWeightage;
 	private Map <String, Integer> courseworkComponent = new Hashtable<String, Integer>();  // <type, weightage>
 
@@ -27,6 +28,7 @@ public class Course implements Serializable
 		this.tutGroups = tutGroups;
 		this.labGroups = labGroups;
 		this.overallVacancy = overallVacancy;
+		this.initialVacancy = overallVacancy;
 		this.examWeightage = examWeightage;
 		this.courseworkComponent = courseworkComponent;
 	}
@@ -40,8 +42,12 @@ public class Course implements Serializable
 		return courseName;
 	}
 
-	public int getVacancy() {
+	public int getOverallVacancy() {
 		return overallVacancy;
+	}
+	
+	public int getInitialVacancy() {
+		return initialVacancy;
 	}
 
 	public String getCoordinator() {

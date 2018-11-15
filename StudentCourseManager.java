@@ -100,30 +100,53 @@ public class StudentCourseManager {
 			}
 			
 			// student not registered yet, proceed with registration ---
-			int choice;
 			String tutg = "NA";
 			String labg = "NA";
+			boolean okflag = false;
 			
 			// check for available tutorial groups
-			ArrayList<String> tutGroup = coursemanager.checkAvailableTutGroup(course);
-			if (!tutGroup.isEmpty()) {
-				System.out.println("Select tutorial group");
-				for(int i = 0; i < tutGroup.size(); i++) {
-		            System.out.println((i+1) + ": " + tutGroup.get(i));
-		        }
-				choice = IOE.scint();
-				tutg = tutGroup.get(choice-1);
+			Map<String, Integer> tutGroup = coursemanager.checkAvailableTutGroup(course);
+			if (tutGroup != null) {
+				do 
+				{
+					System.out.println("Enter tutorial group: ");
+					tutg = read.next(); read.nextLine();
+					if (!tutGroup.containsKey(tutg))
+					{
+						System.out.println("Invalid tutorial group. Please try again.");
+						continue;
+					}
+					if (tutGroup.get(tutg) <= 0) 
+					{
+						System.out.println("This tutorial group is full. Please select another one.");
+						continue;
+					}
+					okflag = true;
+				}
+				while(!okflag);
 			}
 			
 			// check for available lab groups
-			ArrayList<String> labGroup = coursemanager.checkAvailableLabGroup(course);
-			if (!labGroup.isEmpty()) {				
-				System.out.println("Select lab group");
-				for(int i = 0; i < labGroup.size(); i++) {
-		            System.out.println((i+1) + ": " + labGroup.get(i));
-		        }
-				choice = IOE.scint();
-				labg = labGroup.get(choice-1);
+			okflag = false;
+			Map<String, Integer> labGroup = coursemanager.checkAvailableLabGroup(course);
+			if (labGroup != null) {				
+				do 
+				{
+					System.out.println("Enter lab group: ");
+					labg = read.next(); read.nextLine();
+					if (!labGroup.containsKey(labg))
+					{
+						System.out.println("Invalid lab group. Please try again.");
+						continue;
+					}
+					if (labGroup.get(labg) <= 0) 
+					{
+						System.out.println("This lab group is full. Please select another one.");
+						continue;
+					}
+					okflag = true;
+				}
+				while(!okflag);
 			}
 			
 			int n = coursemanager.getNumOfComponent(course);
@@ -165,9 +188,9 @@ public class StudentCourseManager {
 			
 			System.out.println("Select type of list");
 			System.out.println("1: All students in the course");
-			if (!coursemanager.getTutGroup(course).isEmpty())
+			if (coursemanager.getTutGroup(course) != null)
 				System.out.println("2: By tutorial group");
-			if (!coursemanager.getLabGroup(course).isEmpty())
+			if (coursemanager.getLabGroup(course) != null)
 				System.out.println("3: By lab group");
 			
 			System.out.println();
@@ -186,14 +209,21 @@ public class StudentCourseManager {
 			// by tutorial group
 			case 2:
 				// get a list of tutorial groups
-				if (!coursemanager.getTutGroup(course).isEmpty()) {
+				if (coursemanager.getTutGroup(course) != null) {
 					Set<String> tutGroup = coursemanager.getTutGroup(course);
-					System.out.println("Select tutorial group");
+					System.out.println("Select tutorial group: ");
 					// prints out all tutorial groups
 					for (String key : tutGroup) {
 						System.out.println(key);
 					}
+					read.nextLine();
 					selected = read.nextLine();
+					while (!tutGroup.contains(selected))
+					{
+						System.out.println("Invalid tutorial group. Please try again.");
+						System.out.println("Select tutorial group: ");
+						selected = read.next(); read.nextLine();
+					}
 				}
 				else {
 					System.out.println("Invalid selection.");
@@ -212,13 +242,20 @@ public class StudentCourseManager {
 			// by lab group
 			case 3:
 				// get a list of lab groups
-				if (!coursemanager.getLabGroup(course).isEmpty()) {
-					Set<String> tutGroup = coursemanager.getLabGroup(course);
+				if (coursemanager.getLabGroup(course) != null) {
+					Set<String> labGroup = coursemanager.getLabGroup(course);
 					System.out.println("Select lab group");
-					for (String key : tutGroup) {
+					for (String key : labGroup) {
 						System.out.println(key);
 					}
+					read.nextLine();
 					selected = read.nextLine();
+					while (!labGroup.contains(selected))
+					{
+						System.out.println("Invalid lab group. Please try again.");
+						System.out.println("Select lab group: ");
+						selected = read.next(); read.nextLine();
+					}
 				}
 				else {
 					System.out.println("Invalid selection.");

@@ -58,7 +58,7 @@ public class StudentManager
 				if(studentID.equals(temp.getID()))
 				{
 					System.out.println("Student already exist."); 
-					return "NA";
+					return null;
 				}
 			list.add(student);
 			IOE.writeSerializedObject(filename, list);
@@ -68,7 +68,7 @@ public class StudentManager
 		catch ( Exception e ){
 			System.out.println( "Exception addStudent() >> " + e.getMessage());
 		}
-		return "NA";
+		return null;
 	}
 
 	public void deleteStudent()
@@ -104,7 +104,7 @@ public class StudentManager
 	{
 		for(Student temp: list)
 			if(studentID.equals(temp.getID()))
-				return temp.getID();
+				return temp.getName();
 		System.out.println("Student not found.");
 		return "NA";
 	}

@@ -57,12 +57,18 @@ public class UniversityApp
 						case 2: coursemanager.printCourses();
 								break;
 						case 3: String sID = studentmanager.addStudent();
-								studentmanager.printStudents();
-								studentcoursemanager.updateStudentTM(sID); // (By CY) for StudentCourse pls keep this
+								if (sID != null)
+								{
+									studentmanager.printStudents();
+									studentcoursemanager.updateStudentTM(sID); 
+								}
 								break;
 						case 4: String cC = coursemanager.addCourse();
-								coursemanager.printCourses();
-								studentcoursemanager.updateCourseTM(cC); // (By CY) for StudentCourse pls keep this
+								if (cC != null)
+								{
+									coursemanager.printCourses();
+									studentcoursemanager.updateCourseTM(cC);
+								}
 								break;
 						case 5: studentcoursemanager.registerCourse(null);
 								break;
