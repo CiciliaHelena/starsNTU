@@ -76,7 +76,7 @@ public class StudentManager
 				IOE.writeSerializedObject(filename, list);
 				return;
 			}
-		System.out.println("Student not found");
+		System.out.println("Student not found.");
 	}
 	
 	public Student getStudent(String profile)
@@ -84,13 +84,13 @@ public class StudentManager
 		studentID = profile;
 		if(studentID == null)
 		{
-			System.out.print("Enter student matric to show info : ");
+			System.out.print("Enter student matric to show info: ");
 			studentID = scan.next().toUpperCase();
 		}
 		for(Student temp: list)
 			if(studentID.equals(temp.getID()))
 				return temp;
-		System.out.println("Student not found");
+		System.out.println("Student not found.");
 		return null;
 	}
 	
@@ -99,7 +99,7 @@ public class StudentManager
 		for(Student temp: list)
 			if(studentID.equals(temp.getID()))
 				return temp.getID();
-		System.out.println("Student not found");
+		System.out.println("Student not found.");
 		return "NA";
 	}
 

@@ -27,13 +27,9 @@ public class StudentCourseManager {
 
 	private StudentCourseManager()
 	{ 
-		System.out.println("Loading student-course data... Please wait...");
+		System.out.println("Loading grades data... Please wait...");
 			try	{
-				// read from serialized file the list of student records
-				// System.out.println("Initializing StudentCourseManager - - -");
 				list = (ArrayList) IOE.readSerializedObject(filename);
-				// System.out.println("StudentCourse ArrayList created - - -");
-				// System.out.println(list);
 				if(list == null) list = new ArrayList<StudentCourse>();
 		System.out.println("25%..");
 				
@@ -46,7 +42,6 @@ public class StudentCourseManager {
 				
 				// add all students to byStudent
 				for (Student entry: studentmanager.list) {
-					System.out.println("arrgrggrg");
 					byStudent.put(entry.getID(), new LinkedList<Integer>());
 				}
 		System.out.println("75%..");
@@ -61,7 +56,7 @@ public class StudentCourseManager {
 		}  catch ( Exception e ) {
 		 	System.out.println( "Exception >> " + e.getMessage() );
 		}
-		System.out.println("Load student-course data, done\n");
+		System.out.println("Load grades data, done.\n");
 	}
 
 	public static StudentCourseManager initiate() {
@@ -74,6 +69,7 @@ public class StudentCourseManager {
 		String student = profile;
 		if(student == null)
 			{
+				studentmanager.printStudents();
 				System.out.println("Enter student ID: ");
 				student = read.next().toUpperCase();
 			}
@@ -144,7 +140,7 @@ public class StudentCourseManager {
 			// update course vacancy
 			coursemanager.updateVacancy(course, tutg, labg);
 			
-			System.out.println("Student successfully registered!");	
+			System.out.println("Student successfully registered.");	
 		}
 		
 		// student or course doesn't exist, cancel registration
@@ -267,7 +263,7 @@ public class StudentCourseManager {
 				}
 			}	
 			// if course not found
-			System.out.println("Invalid course");
+			System.out.println("Invalid course.");
 		}
 		else 
 			// if student doesn't exist
@@ -311,15 +307,15 @@ public class StudentCourseManager {
 						//System.out.println(list);
 						return;
 					}
-					System.out.println("No information about coursework component");
+					System.out.println("No information about coursework component.");
 					return;
 				}
 			}
-			System.out.println("Invalid course");
+			System.out.println("Invalid course.");
 			return;
 		}
 		else {
-			System.out.println("Invalid student or course");
+			System.out.println("Invalid student or course.");
 			return;
 		}
 	}
@@ -345,11 +341,8 @@ public class StudentCourseManager {
 					mark = calTotalMarks(list.get((int) indexList.get(i)));
 					if (mark == -1) return;
 					grade = convertToGrade(mark);
-					//System.out.println("grade-- " + grade);
 					if (grade > 0) {
-						//System.out.println("Grade count before adding-- " + count);
 						count[grade-1]++;
-						//System.out.println("Grade count after adding-- " + count);
 					}
 				}
 				break;
@@ -363,9 +356,7 @@ public class StudentCourseManager {
 					}
 					grade = convertToGrade(mark);
 					if (grade > 0) {
-						//System.out.println("Grade count before adding-- " + count);
 						count[grade-1]++;
-						//System.out.println("Grade count after adding-- " + count);
 					}
 				}
 				break;
@@ -488,7 +479,6 @@ public class StudentCourseManager {
 	}
 	
 	private int convertToGrade(int mark) {
-		//System.out.println("Mark to convert-- " + mark);
 		if (mark >= 0 && mark <= 100) { // check if mark is in range
 			if (mark >= 80) return 1;
 			else if (mark >= 70) return 2;
@@ -513,7 +503,6 @@ public class StudentCourseManager {
 	// calculates the total marks of a student for a particular course by taking individual component with its weightage
 	// return -1 if the marks have not been entered yet
 	private int calTotalMarks(StudentCourse sC) {
-		//System.out.println("Calculating total marks- - -");
 		// check if marks have been entered
 		if (sC.getExamResult() != -1 && sC.getCourseworkResult()[0] != -1) {
 			int w = coursemanager.getExamWeightage(sC.getCourseCode());
@@ -529,21 +518,16 @@ public class StudentCourseManager {
 			return totalMarks;
 		}
 		else { // if not then grade is not calculated 
-			//System.out.println("Not enough information to calculate grade.");
 			return -1;
 		}
 	}
 	
 	public void updateStudentTM(String student) {
-		System.out.println("Updating byStudent TreeMap");
 		byStudent.put(student, new LinkedList<Integer>());
-		System.out.println("byStudent- " + byStudent);
 	}
 	
 	public void updateCourseTM(String course) {
-		System.out.println("Updating byCourse TreeMap");
 		byCourse.put(course, new LinkedList<Integer>());
-		System.out.println("byCourse- " + byCourse);
 	}
 	
 }
