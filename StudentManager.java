@@ -10,7 +10,6 @@ public class StudentManager
 	private Scanner scan = new Scanner(System.in);
 	private String studentID;
 	private static StudentManager theinstance = null;
-	//private static StudentCourseManager studentcoursemanager;
 
 	private StudentManager()
 	{
@@ -19,11 +18,11 @@ public class StudentManager
 		{
 			list = (ArrayList<Student>) IOE.readSerializedObject(filename);
 			if(list == null) list = new ArrayList<Student>();
-			 for (int i = 0; i < list.size(); i++)
-			 {
-			 	Student c = (Student) list.get(i);
-			 	System.out.println(c);
-			 }
+			// for (int i = 0; i < list.size(); i++)
+			// {
+			// 	Student c = (Student) list.get(i);
+			// 	System.out.println(c);
+			// }
 		}
 		catch(Exception e){System.out.println( "Exception StudentManager() >> "+e.getMessage());}
 		System.out.println("Load student data, done.\n");
@@ -35,12 +34,8 @@ public class StudentManager
 			theinstance = new StudentManager();
 		return theinstance;
 	}
-	
-	/*public void initSCM() {
-		studentcoursemanager = StudentCourseManager.initiate();
-	}*/
 
-	public void addStudent()
+	public String addStudent()
 	{
 		System.out.print("Adding student. ");
 		System.out.println("Enter the student ID: ");
@@ -57,16 +52,17 @@ public class StudentManager
 				if(studentID.equals(temp.getID()))
 				{
 					System.out.println("Student already exist."); 
-					return;
+					return "NA";
 				}
 			list.add(student);
 			IOE.writeSerializedObject(filename, list);
-			StudentCourseManager.updateStudentTM(student.getName()); // (By CY) for StudentCourse pls keep this
 			System.out.println("Successfully added student.");
+			return sID;
 		}
 		catch ( Exception e ){
 			System.out.println( "Exception addStudent() >> " + e.getMessage());
 		}
+		return "NA";
 	}
 
 	public void deleteStudent()
