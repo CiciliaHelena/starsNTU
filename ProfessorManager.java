@@ -6,11 +6,25 @@ import java.util.Scanner;
 import java.util.StringTokenizer;
 
 public class ProfessorManager {
+	/**
+	 * for pretty formating and standardisation
+	 */
 	public static final String SEPARATOR = "|";
+	
+	/**
+	 * location of pre-existing data of professors
+	 */
 	String filename = "professor.txt";
+	
+	/**
+	 * 
+	 */
 	protected ArrayList<Professor> al = new ArrayList<Professor>();
 	private static ProfessorManager theinstance = null;
 
+	/**
+	 * reads next professor data from file
+	 */
 	private ProfessorManager() {
 		try {
 			al = readProfessors(filename);
@@ -20,12 +34,18 @@ public class ProfessorManager {
 		}
 	}
 	
+	/**
+	 * gets the next data of professor if holding nothing
+	 */
 	public static ProfessorManager initiate() {
 		if(theinstance == null)
 			theinstance = new ProfessorManager();
 		return theinstance;
 	}
 	
+	/**
+	 * prints the list of all professors and their details
+	 */
 	public void printProfessors () {
 		for (int i = 0 ; i < al.size() ; i++) {
 			Professor prof = (Professor)al.get(i);
@@ -33,14 +53,23 @@ public class ProfessorManager {
 		}	
 	}
 	
+	/**
+	 * gets a ith Professor object from the file
+	 */
 	public Professor getProfessor(int i) {
 		return al.get(i-1);
 	}
 	
+	/**
+	 * gets the ith Professor's name from the file
+	 */
 	public String getProfName(int i) {
 		return al.get(i-1).getName();
 	}
 	
+	/**
+	 * prints the details of a professor given the name
+	 */
 	public void printDetails(String n) {
 		for (int i = 0 ; i < al.size() ; i++) {
 			Professor cur = al.get(i);
@@ -54,6 +83,9 @@ public class ProfessorManager {
 		}
 	}
 	
+	/**
+	 * read file for Professor objects and trims the result
+	 */
 	public static ArrayList readProfessors(String filename) throws IOException {
 		// read String from text file
 		ArrayList stringArray = (ArrayList)read(filename);
@@ -74,6 +106,9 @@ public class ProfessorManager {
 			return alr ;
 	}
 	
+	/**
+	 * basic file reading Professor Object
+	 */
 	public static List read(String fileName) throws IOException {
 		List data = new ArrayList() ;
 	    Scanner scanner = new Scanner(new FileInputStream(fileName));
