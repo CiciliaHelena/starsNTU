@@ -15,8 +15,6 @@ public class Course implements Serializable
 	private int initialVacancy;
 	private int examWeightage;
 	private Map <String, Integer> courseworkComponent = new Hashtable<String, Integer>();  // <type, weightage>
-	boolean
-
 
 
 	public Course(String courseCode,String courseName,String coordinator,int[] numOfGroup,Map <String, Integer> tutGroups,Map <String, Integer> labGroups,int overallVacancy,int examWeightage, Map <String, Integer> courseworkComponent)
