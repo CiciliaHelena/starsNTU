@@ -1,4 +1,3 @@
-
 public class Professor {
 	private String name;
 	private String email;

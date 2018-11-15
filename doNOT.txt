@@ -60,3 +60,15 @@ c761 9d03 0001 4900 0473 697a 6578 7000
 4369 6369 6c69 6120 4865 6c65 6e61 7400
 0b68 656c 656e 6361 6e74 696b 7400 0955
 3137 3230 3534 3143 78
+
+javac IOE.java
+javac Professor.java
+javac ProfessorManager.java
+javac Student.java
+javac StudentManager.java
+javac Course.java
+javac CourseManager.java
+javac StudentCourse.java
+javac StudentCourseManager.java
+javac LoginManager.java
+javac UniversityApp.java
