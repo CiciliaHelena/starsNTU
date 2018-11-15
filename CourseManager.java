@@ -13,6 +13,8 @@ public class CourseManager
 	private Scanner scan = new Scanner(System.in);
 	private String courseCode;
 	private static CourseManager theinstance = null;
+	//private static StudentCourseManager studentcoursemanager;
+	private static ProfessorManager professormanager = ProfessorManager.initiate();
 
 
 	private CourseManager()
@@ -31,6 +33,8 @@ public class CourseManager
 		catch(Exception e){System.out.println( "Exception CourseManager() >> "+e.getMessage());}
 		System.out.println("Load course data, done.\n");
 	}
+	
+	
 
 	public static CourseManager initiate()
 	{
@@ -39,6 +43,10 @@ public class CourseManager
 		return theinstance;
 	}
 
+	/*public void initSCM() {
+		studentcoursemanager = StudentCourseManager.initiate();
+	}*/
+	
 	public void addCourse()
 	{	String courseCode;
 		String courseName;
@@ -54,22 +62,23 @@ public class CourseManager
 		
 		System.out.print("Adding course. ");
 		Scanner read = new Scanner(System.in);
-		System.out.println("Enter course code : ");
+		System.out.println("Enter course code: ");
 		courseCode = read.next().toUpperCase(); 
 		read.nextLine();
-		System.out.println("Enter course name : ");
+		System.out.println("Enter course name: ");
 		courseName = read.nextLine().toUpperCase();
-		System.out.println("Enter course coordinator");
-		coordinator = read.nextLine();
+		System.out.println("Select course coordinator: ");
+		professormanager.printProfessors();
+		coordinator = professormanager.getProfName(IOE.scint());
 
 		String[] ar = {"lecture", "tutorial", "lab"};
 		for(int i = 0; i < 3; i++)
 		{
-			System.out.println("does it has "+ar[i]+"? (yes/no)");
+			System.out.println("Does it has "+ar[i]+"? (yes/no)");
 			temp = read.next().toLowerCase();
 			while(!temp.equals("yes") && !temp.equals("y") && !temp.equals("no") && !temp.equals("n"))
 			{
-				System.out.print("Try again : ");
+				System.out.print("Try again: ");
 				temp = read.next().toLowerCase();
 			}
 			if(temp.equals("yes") || temp.equals("y")) numOfGroup[i] = 1;
@@ -89,22 +98,22 @@ public class CourseManager
 			{
 				tutGroups = new Hashtable<String, Integer>();  // <index, vacancy>
 				k = 0;
-				System.out.print("Enter the number of tutorial group available : ");
+				System.out.print("Enter the number of tutorial groups available: ");
 				n = IOE.scint();
 				numOfGroup[1] = n;
 				for(int i = 0; i < n; i++)
 				{
-					System.out.print("Please enter tutorial group "+(i+1)+" index : ");
+					System.out.print("Please enter tutorial group "+(i+1)+"'s index: ");
 					temp = read.next();
-					System.out.print("Please enter tutorial group "+(i+1)+" vacancy : ");
+					System.out.print("Please enter tutorial group "+(i+1)+"'s vacancy: ");
 					l = IOE.scint();
 					tutGroups.put(temp.toUpperCase(), l);
 					k += l;
 				}
 				if(k < overallVacancy)
 				{
-					System.out.println("Total vacancy of lab group must not less than overall vacancy");
-					System.out.println("Repeat the process");
+					System.out.println("Total vacancy of tutorial group must not be less than overall vacancy!");
+					System.out.println("Please re-enter");
 				}
 				else okflag = true;
 			}
@@ -117,22 +126,22 @@ public class CourseManager
 			{
 				labGroups = new Hashtable<String, Integer>();  // <index, vacancy>
 				k = 0;
-				System.out.print("Enter the number of lab group available : ");
+				System.out.print("Enter the number of lab groups available: ");
 				n = IOE.scint();
 				numOfGroup[2] = n;
 				for(int i = 0; i < n; i++)
 				{
-					System.out.print("Please enter lab group "+(i+1)+" index : ");
+					System.out.print("Please enter lab group "+(i+1)+"'s index: ");
 					temp = read.next();
-					System.out.print("Please enter lab group "+(i+1)+" vacancy : ");
+					System.out.print("Please enter lab group "+(i+1)+"'s vacancy: ");
 					l = IOE.scint();
 					labGroups.put(temp.toUpperCase(), l);
 					k += l;
 				}
 				if(k < overallVacancy)
 				{
-					System.out.println("Total vacancy of lab group must not less than overall vacancy");
-					System.out.println("Repeat the process");
+					System.out.println("Total vacancy of lab group must not be less than overall vacancy!");
+					System.out.println("Please re-enter");
 				}
 				else okflag = true;
 			}
@@ -144,23 +153,25 @@ public class CourseManager
 			total = 0;
 			System.out.print("Enter the exam weightage: "); 
 			examWeightage = IOE.scint();
-			total += examWeightage;
+			//total += examWeightage;
 			System.out.println("Enter the number of coursework components in this course: ");
 			n = IOE.scint();
 			read.nextLine();
-			if (n == 0)
+			if (n == 1) {
 				courseworkComponent.put("Coursework", 100);
+				total = 100;
+			}
 			else
 				for(int i = 0 ;i < n; i++)
 				{
-					System.out.print("Key in the name of component "+(i+1)+" : ");
+					System.out.print("Key in the name of component "+(i+1)+": ");
 					temp = read.nextLine();
-					System.out.print("Key in the weightage of component "+(i+1)+" : ");
+					System.out.print("Key in the weightage of component "+(i+1)+": ");
 					lol = IOE.scint();
 					courseworkComponent.put(temp, lol);
 					total += lol;
 				}
-			if(total != 100) System.err.println("Total percentage must be equal to 100%!");
+			if(total != 100) System.err.println("Total percentage must be equal to 100!\n");
 		}
 		while(total != 100);
 
@@ -174,12 +185,13 @@ public class CourseManager
 					{System.out.println("Course already exist"); return;}
 			list.add(course);
 			IOE.writeSerializedObject(filename, list);
+			StudentCourseManager.updateCourseTM(course.getCourseCode()); // (By CY) for StudentCourse pls keep this
 			System.out.println("successfully updated course list");
 		}
 		catch ( Exception e ){System.out.println( "Exception addCourse() >> " + e.getMessage());}
 	}
 
-	public void deleteCourse()
+	/*public void deleteCourse()
 	{
 		System.out.print("Enter course code to delete : ");
 		courseCode = scan.next().toUpperCase();
@@ -191,7 +203,7 @@ public class CourseManager
 				return;
 			}
 		System.out.println("Course not found");
-	}
+	}*/
 
 	public void checkVacancy()
 	{
@@ -217,10 +229,13 @@ public class CourseManager
 		for(Course temp: list)
 			if(courseCode.equals(temp.getCourseCode())){
 				Map<String, Integer> groups = temp.getTutGroup();
-				for(Map.Entry<String, Integer> e : groups.entrySet()) {
-				    if (e.getValue() != 0)			     
-				    	keys.add(e.getKey());
+				try {
+					for(Map.Entry<String, Integer> e : groups.entrySet()) {
+					    if (e.getValue() != 0)			     
+					    	keys.add(e.getKey());
+					}
 				}
+				catch (Exception e) {}
 			}
 		return keys;
 	}
@@ -230,17 +245,19 @@ public class CourseManager
 		ArrayList<String> keys = new ArrayList();
 		for(Course temp: list)
 			if(courseCode.equals(temp.getCourseCode())){
-				Map<String, Integer> groups = temp.getLabGroup();				
-				for(Map.Entry<String, Integer> e : groups.entrySet()) {
-				    if (e.getValue() != 0)			     
-				    	keys.add(e.getKey());
+				Map<String, Integer> groups = temp.getLabGroup();		
+				try {
+					for(Map.Entry<String, Integer> e : groups.entrySet()) {
+					    if (e.getValue() != 0)			     
+					    	keys.add(e.getKey());
+					}
 				}
+				catch (Exception e) {}
 			}
 		return keys;
 	}
 	
-	public int getNumOfComponent(String courseCode)
-	{ // for StudentCourse
+	public int getNumOfComponent(String courseCode) { // for StudentCourse
 		for(Course temp: list)
 			if(courseCode.equals(temp.getCourseCode())){
 				return temp.getCourseworkComponent().size();
@@ -250,7 +267,7 @@ public class CourseManager
 
 	public void showCoordinator()
 	{
-		System.out.print("Enter course code to show coordinator : ");
+		System.out.print("Enter course code to show coordinator: ");
 		courseCode = scan.next().toUpperCase();
 		for(Course temp: list)
 			if(courseCode.equals(temp.getCourseCode()))
@@ -260,17 +277,20 @@ public class CourseManager
 
 	public void printCourses()
 	{
-		System.out.println("Print all courses");
+		System.out.println("\nAll courses available");
+		System.out.println("---------------------");
 		try
 		{
-			for(Course temp:list)
+			for(Course temp:list) {
 				System.out.println(temp);
+				professormanager.printDetails(temp.getCoordinator());
+			}
+			System.out.println();
 		}
 		catch ( Exception e ){System.out.println( "Exception printCourses() >> " + e.getMessage());}
 	}
 	
-	public Set getTutGroup (String courseCode)
-	{ // for StudentCourse
+	public Set getTutGroup (String courseCode) { // for StudentCourse
 		for(Course temp: list) {
 			if(courseCode.equals(temp.getCourseCode())) 
 				return temp.getTutGroup().keySet();
@@ -278,8 +298,7 @@ public class CourseManager
 		return null;
 	}
 
-	public Set getLabGroup (String courseCode)
-	{ // for StudentCourse
+	public Set getLabGroup (String courseCode) { // for StudentCourse
 		for(Course temp: list) {
 			if(courseCode.equals(temp.getCourseCode())) 
 				return temp.getLabGroup().keySet();
@@ -287,8 +306,7 @@ public class CourseManager
 		return null;
 	}
 	
-	public void updateVacancy(String courseCode, String tutGroup, String labGroup)
-	{ // for StudentCourse // "NA" for non tut or lab groups
+	public void updateVacancy(String courseCode, String tutGroup, String labGroup) { // for StudentCourse // "NA" for non tut or lab groups
 		for(Course temp: list) {
 			if(courseCode.equals(temp.getCourseCode())) {
 				temp.setVacancy(temp.getVacancy()-1);
@@ -309,27 +327,27 @@ public class CourseManager
 		}
 	}
 	
-	public int getExamWeightage(String courseCode)
-	{
-		for(Course temp: list)
+	public int getExamWeightage(String courseCode) {
+		for(Course temp: list) {
 			if(courseCode.equals(temp.getCourseCode())) 
 				return temp.getExamWeightage();
+		}
 		return -1;
 	}
 
-	public String getCourseName(String courseCode)
-	{
-		for(Course temp: list)
+		public String getCourseName(String courseCode) {
+		for(Course temp: list) {
 			if(courseCode.equals(temp.getCourseCode())) 
 				return temp.getCourseName();
+		}
 		return "No such course";
 	}
 
-	public Map<String, Integer> getCourseworkComponent(String courseCode)
-	{
-		for(Course temp: list)
+	public Map<String, Integer> getCourseworkComponent(String courseCode) {
+		for(Course temp: list) {
 			if(courseCode.equals(temp.getCourseCode())) 
 				return temp.getCourseworkComponent();
+		}
 		return null;
 	}
 

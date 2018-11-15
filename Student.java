@@ -5,8 +5,8 @@ import java.util.Scanner;
 
 public class Student implements Serializable
 {
-	private String studentID;	//matric saved in capital should not case sensitive
-	private String name;		//case sensitive
+	private String studentID;
+	private String name;
 	private String password;
 	private double CGPA = 0;
 

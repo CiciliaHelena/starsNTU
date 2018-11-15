@@ -15,7 +15,7 @@ public class UniversityApp
 		LoginManager loginmanager = LoginManager.initiate();
 
 		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-		System.out.println("           Welcome to NTU course registration system");
+		System.out.println("           Welcome to NTU Course Registration System");
 		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 		while(profile == null)
 		{
@@ -28,14 +28,14 @@ public class UniversityApp
 			if(profile != null && profile.equals("admin"))
 			{
 				System.out.println("------------------------------------------------------------------");
-				System.out.println("             You are log-in as an administrator.");
+				System.out.println("             You are logged in as an administrator.");
 				System.out.println("------------------------------------------------------------------\n");
 				do
 				{
 					System.out.print("\n==================================================================\n");
 					System.out.println("Main menu");
-					System.out.println("1: Print all student list");
-					System.err.println("2: Print all course list");
+					System.out.println("1: Print list of all students");
+					System.out.println("2: Print list of all courses");
 					System.out.println("3: Add a new student");
 					System.out.println("4: Add a new course");
 					System.out.println("5: Register student for a course");
@@ -58,10 +58,8 @@ public class UniversityApp
 								break;
 						case 3: studentmanager.printStudents();
 								studentmanager.addStudent();
-								studentcoursemanager.updateStudentTM(student.getName()); // (By CY) for StudentCourse pls keep this
 								break;
 						case 4: coursemanager.addCourse();
-								studentcoursemanager.updateCourseTM(course.getCourseCode()); // (By CY) for StudentCourse pls keep this
 								break;
 						case 5: studentcoursemanager.registerCourse(null);
 								break;
@@ -78,13 +76,12 @@ public class UniversityApp
 						case 11:studentcoursemanager.printStudentTranscript(null);
 								break;
 						case 12:profile = null;
-								System.out.println("Log-out successfully.");
 								break;
 						default:break;
 					}
 					System.out.print("\n==================================================================\n");
 				}
-				while(token != 12);
+				while(token != 11);
 			}
 
 			if(profile != null)
@@ -122,13 +119,12 @@ public class UniversityApp
 						case 6:studentcoursemanager.printStudentTranscript(profile);
 								break;
 						case 7:profile = null;
-								System.out.println("Log-out successfully.");
 								break;
 						default:break;
 					}
 					System.out.print("\n==================================================================\n");
 				}
-				while(token != 7);
+				while(token != 6);
 			}
 		}
 	}
