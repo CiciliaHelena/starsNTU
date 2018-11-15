@@ -178,6 +178,7 @@ public class CourseManager
 			list.add(course);
 			IOE.writeSerializedObject(filename, list);
 			System.out.println("Course succesfully added!");
+			printCourses();
 			return courseCode;
 		}
 		catch ( Exception e ){System.out.println( "Exception addCourse() >> " + e.getMessage());}
