@@ -21,9 +21,7 @@ public class StudentManager
 	 */
 	private String studentID;
 	
-	/**
-	 * pointer to read the file, initialized to null
-	 */
+
 	private static StudentManager theinstance = null;
 
 	/**
@@ -83,7 +81,7 @@ public class StudentManager
 				if(studentID.equals(temp.getID()))
 				{
 					System.out.println("Student already exist."); 
-					return null;
+					return "NA";
 				}
 			list.add(student);
 			IOE.writeSerializedObject(filename, list);
@@ -93,7 +91,7 @@ public class StudentManager
 		catch ( Exception e ){
 			System.out.println( "Exception addStudent() >> " + e.getMessage());
 		}
-		return null;
+		return "NA";
 	}
 
 	/**
@@ -138,7 +136,7 @@ public class StudentManager
 	{
 		for(Student temp: list)
 			if(studentID.equals(temp.getID()))
-				return temp.getName();
+				return temp.getID();
 		System.out.println("Student not found.");
 		return "NA";
 	}
