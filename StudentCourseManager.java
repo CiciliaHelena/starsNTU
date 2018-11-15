@@ -7,12 +7,16 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
 
-// notes for myself: 
-// - add code in Course and Student class to add entries to both TreeMaps when addCourse or addStudent
-
 
 public class StudentCourseManager {
+	/**
+	 * ArrayList containing all StudentCourse objects stored in the dat file.
+	 */
 	private ArrayList<StudentCourse> list = new ArrayList<StudentCourse>();
+	
+	/**
+	 * TreeMap that maps the course code to a list of indices 
+	 */
 	private TreeMap<String, LinkedList<Integer>> byCourse = new TreeMap<String, LinkedList<Integer>>();
 	// <courseID, [index of records of students taking the course]>
 	private TreeMap<String, LinkedList<Integer>> byStudent = new TreeMap<String, LinkedList<Integer>>();
@@ -71,11 +75,11 @@ public class StudentCourseManager {
 			{
 				studentmanager.printStudents();
 				System.out.println("Enter student ID: ");
-				student = read.next().toUpperCase();
+				student = read.next().toUpperCase(); read.nextLine();
 			}
 		coursemanager.printCourses();
 		System.out.println("Enter course code: ");
-		String course = read.next().toUpperCase();
+		String course = read.next().toUpperCase(); read.nextLine();
 		
 		// check if student and course exists
 		if (byCourse.containsKey(course) && byStudent.containsKey(student))
@@ -110,7 +114,7 @@ public class StudentCourseManager {
 				do 
 				{
 					System.out.println("Enter tutorial group: ");
-					tutg = read.next(); read.nextLine();
+					tutg = read.next().toUpperCase(); read.nextLine();
 					if (!tutGroup.containsKey(tutg))
 					{
 						System.out.println("Invalid tutorial group. Please try again.");
@@ -133,7 +137,7 @@ public class StudentCourseManager {
 				do 
 				{
 					System.out.println("Enter lab group: ");
-					labg = read.next(); read.nextLine();
+					labg = read.next().toUpperCase(); read.nextLine();
 					if (!labGroup.containsKey(labg))
 					{
 						System.out.println("Invalid lab group. Please try again.");
@@ -178,7 +182,7 @@ public class StudentCourseManager {
 	
 	public void printStudentList() {
 		System.out.println("Enter course code: ");
-		String course = read.next().toUpperCase();
+		String course = read.next().toUpperCase(); read.hasNextLine();
 		String id;
 		
 		if (byCourse.containsKey(course)) {
@@ -202,7 +206,7 @@ public class StudentCourseManager {
 				System.out.println("List of students in " + course);
 				for (int i = 0; i < size; i++) {
 					id = list.get((int) indexList.get(i)).getStudentID();
-					System.out.println(studentmanager.getStudentName(id));
+					System.out.println(studentmanager.getStudent(id));
 				}
 				return;
 			
@@ -217,12 +221,12 @@ public class StudentCourseManager {
 						System.out.println(key);
 					}
 					read.nextLine();
-					selected = read.nextLine();
+					selected = read.nextLine().toUpperCase();
 					while (!tutGroup.contains(selected))
 					{
 						System.out.println("Invalid tutorial group. Please try again.");
 						System.out.println("Select tutorial group: ");
-						selected = read.next(); read.nextLine();
+						selected = read.next().toUpperCase(); read.nextLine();
 					}
 				}
 				else {
@@ -234,7 +238,7 @@ public class StudentCourseManager {
 				for (int i = 0; i < size; i++) {
 					if (list.get((int) indexList.get(i)).getTutGroup().equals(selected)) {
 						id = list.get((int) indexList.get(i)).getStudentID();
-						System.out.println(studentmanager.getStudentName(id));
+						System.out.println(studentmanager.getStudent(id));
 					}
 				}
 				return;
@@ -249,12 +253,12 @@ public class StudentCourseManager {
 						System.out.println(key);
 					}
 					read.nextLine();
-					selected = read.nextLine();
+					selected = read.nextLine().toUpperCase();
 					while (!labGroup.contains(selected))
 					{
 						System.out.println("Invalid lab group. Please try again.");
 						System.out.println("Select lab group: ");
-						selected = read.next(); read.nextLine();
+						selected = read.next().toUpperCase(); read.nextLine();
 					}
 				}
 				else {
@@ -266,7 +270,7 @@ public class StudentCourseManager {
 				for (int i = 0; i < size; i++) {
 					if (list.get((int) indexList.get(i)).getLabGroup().equals(selected)) {
 						id = list.get((int) indexList.get(i)).getStudentID();
-						System.out.println(studentmanager.getStudentName(id));
+						System.out.println(studentmanager.getStudent(id));
 					}
 				}
 				return;
@@ -283,12 +287,12 @@ public class StudentCourseManager {
 	// Asks user for student name and course, then lets user input the exam mark
 	public void inputExamMark () {
 		System.out.println("Enter student ID: ");
-		String name = read.nextLine();
+		String name = read.nextLine().toUpperCase();
 		
 		if (byStudent.containsKey(name)) {
 			LinkedList indexList = byStudent.get(name);
 			System.out.println("Enter course code: ");
-			name = read.nextLine();
+			name = read.nextLine().toUpperCase();
 			for (int i = 0; i < indexList.size(); i++) {
 				if (list.get((int) indexList.get(i)).getCourseCode().equals(name)) {
 					System.out.println("Enter exam mark: ");
@@ -315,12 +319,12 @@ public class StudentCourseManager {
 	// Asks user for student name and course, then lets user input marks for each coursework component
 	public void inputCourseworkMark () {
 		System.out.println("Enter student ID: ");
-		String student = read.nextLine();
+		String student = read.nextLine().toUpperCase();
 		
 		if (byStudent.containsKey(student)) {
 			LinkedList indexList = byStudent.get(student);
 			System.out.println("Enter course code: ");
-			String course = read.next().toUpperCase();
+			String course = read.next().toUpperCase(); read.nextLine();
 			
 			for (int i = 0; i < indexList.size(); i++) {
 				// find course
@@ -363,7 +367,7 @@ public class StudentCourseManager {
 	
 	public void printCourseStatistics() {
 		System.out.println("Enter course code: ");
-		String course = read.next().toUpperCase();
+		String course = read.next().toUpperCase(); read.nextLine();
 		int[] count = {0,0,0,0,0}; //[A,B,C,D,F]
 		int mark, grade;
 		
@@ -443,7 +447,7 @@ public class StudentCourseManager {
 		if(student == null)
 		{
 			System.out.println("Enter student ID: ");
-			student = read.next().toUpperCase();
+			student = read.next().toUpperCase(); read.nextLine();
 		}
 
 		int mark;
