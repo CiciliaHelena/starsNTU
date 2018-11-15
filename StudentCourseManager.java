@@ -381,9 +381,13 @@ public class StudentCourseManager {
 			
 			switch(choice) {
 			case 1: 
-				for (int i = 0; i < indexList.size(); i++) {
+				for (int i = 0; i < indexList.size(); i++) 
+				{
 					mark = calTotalMarks(list.get((int) indexList.get(i)));
-					if (mark == -1) return;
+					if (mark == -1) {
+						System.out.println("Mark for student " + list.get((int) indexList.get(i)).getStudentID() + " have not been entered yet.");
+						return;
+					}
 					grade = convertToGrade(mark);
 					if (grade > 0) {
 						count[grade-1]++;
@@ -392,7 +396,8 @@ public class StudentCourseManager {
 				break;
 				
 			case 2: 
-				for (int i = 0; i < indexList.size(); i++) {
+				for (int i = 0; i < indexList.size(); i++) 
+				{
 					mark = list.get((int) indexList.get(i)).getExamResult();
 					if (mark == -1) {
 						System.out.println("Exam marks not entered yet.");
@@ -426,11 +431,11 @@ public class StudentCourseManager {
 			
 			int numOfGrades = count[0] + count[1] + count[2] + count[3] + count[4];
 			System.out.println("Statistics for " + course);
-			System.out.println("A: " + (count[0]/numOfGrades)*100 + "%");
-			System.out.println("B: " + (count[1]/numOfGrades)*100 + "%");
-			System.out.println("C: " + (count[2]/numOfGrades)*100 + "%");
-			System.out.println("D: " + (count[3]/numOfGrades)*100 + "%");
-			System.out.println("F: " + (count[4]/numOfGrades)*100 + "%");
+			System.out.println("A: " + (count[0]*100/numOfGrades) + "%");
+			System.out.println("B: " + (count[1]*100/numOfGrades) + "%");
+			System.out.println("C: " + (count[2]*100/numOfGrades) + "%");
+			System.out.println("D: " + (count[3]*100/numOfGrades) + "%");
+			System.out.println("F: " + (count[4]*100/numOfGrades) + "%");
 		}
 		
 		else {
