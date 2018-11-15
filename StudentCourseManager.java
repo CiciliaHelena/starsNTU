@@ -17,14 +17,28 @@ public class StudentCourseManager {
 	// <courseID, [index of records of students taking the course]>
 	private TreeMap<String, LinkedList<Integer>> byStudent = new TreeMap<String, LinkedList<Integer>>();
 	// <studentID, [index of records of courses taken by student]>
+	
+	/**
+	 * point to a pre-existing data of relation of student and course 
+	 */
 	private String filename = "StudentCourse.dat";
+	
 	private Scanner read = new Scanner(System.in);
+	
+	/**
+	 * initialize the instance to null, or to restart.
+	 */
 	private static StudentCourseManager theinstance = null;
 
+	/**
+	 * re-initialize the other control classes
+	 */
 	private static CourseManager coursemanager = CourseManager.initiate();
 	private static StudentManager studentmanager = StudentManager.initiate();
 
-
+	/**
+	 * 
+	 */
 	private StudentCourseManager()
 	{ 
 		System.out.println("Loading grades data... Please wait...");
