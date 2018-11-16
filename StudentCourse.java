@@ -3,52 +3,44 @@
 import java.io.Serializable;
 
 public class StudentCourse implements Serializable {
-	/**
-	 * The coursecode of the course this student is registering for.
-	 */
 	private String courseCode;
-
+	
 	/**
-	 * The tutorial group of this course this student is registering for.
+	 * This StudentCourse's tutorial group.
 	 * "NA" to indicate that tutorial is not conducted for the course.
 	 */
-	private String tutGroup;
-
+	private String tutGroup; // "NA" to indicate class type not conducted for the course
+	
 	/**
-	 * The lab group of this course this student is registering for.
+	 * This StudentCourse's lab group.
 	 * "NA" to indicate that lab is not conducted for the course.
 	 */
 	private String labGroup;
+	private String studentID;
 	
 	/**
-	 * This student's ID.
+	 * This StudentCourse's exam results. Initialized as -1.
 	 */
-	private String studentID;
-
+	private int examResult; 
+	
 	/**
-	 * The exam result of this student in this course.
-	 * -1 to indicate the result has not been entered yet.
-	 */
-	private int examResult;
-
-	/**
-	 * The coursework results of this student in this course in order of the coursework components entered.
-	 * First element -1 to indicate the result has not been entered yet.
+	 * This StudentCourse's coursework results stored in the same order as 
+	 * courseworkComponent in the Course class.
+	 * The 1st element is initialized as -1.
 	 */
 	private int[] courseworkResult;
 	
 	/**
-	 * Creates a new StudentCourse entry with the given student ID, course code, 
-	 * tutorial group, lab group, and number of coursework components.
-	 * @param sID This student's ID.
-	 * @param cC The course code this student is registering for.
-	 * @param tG The tutorial group this student is registering for ("NA" if course does not have tutorial).
-	 * @param lG The lab group this student is registering for ("NA" if course does not have lab).
-	 * @param size The number of coursework components. Constructor will create an array courseworkResult of given size.
-	 * Constructor will initialize examResult as -1.
-	 * Constructor will initialize first element in courseworkResult as -1.
+	 * Constructor of StudentCourse. Initializes exam result and the 1st element of coursework
+	 * result as -1. Creates an array of integers of size parameter size.
+	 * @param sID This StudentCourse's student ID.
+	 * @param cC This StudnetCourse's course code.
+	 * @param tG This StudentCourse's tutorial group. "NA" if not applicable.
+	 * @param lG This StudentCourse's lab group. "NA" if not applicable.
+	 * @param size The number of coursework components in this StudentCourse.
 	 */
-	public StudentCourse(String sID, String cC, String tG, String lG, int size) {
+	public StudentCourse(String sID, String cC, String tG, String lG, int size) 
+	{
 		studentID = sID;
 		courseCode = cC;
 		tutGroup = tG;
@@ -58,46 +50,50 @@ public class StudentCourse implements Serializable {
 		courseworkResult[0] = -1;
 	}
 	
-	/**
-	 * Gets the course code of this StudentCourse record.
-	 * @return This StudentCourse record's course code.
-	 */
-	public String getCourseCode() {
+	public String getCourseCode() 
+	{
 		return courseCode;
 	}
 	
-	/**
-	 * Gets the student ID of this StudentCourse record.
-	 * @return
-	 */
-	public String getStudentID() {
+	public String getStudentID() 
+	{
 		return studentID;
 	} 
 	
-	public String getTutGroup() {
+	public String getTutGroup() 
+	{
 		return tutGroup;
 	}
 	
-	public String getLabGroup() {
+	public String getLabGroup() 
+	{
 		return labGroup;
 	}
 
-	public int[] getCourseworkResult() {
+	public int[] getCourseworkResult() 
+	{
 		return courseworkResult;
 	}
 	
-	public int getExamResult() {
+	public int getExamResult() 
+	{
 		return examResult;
 	}
 	
-	public void setExamResult(int mark) {
+	public void setExamResult(int mark) 
+	{
 		examResult = mark;
 	}
 	
-	public void setCourseworkResult(int[] marks) {
+	public void setCourseworkResult(int[] marks) 
+	{
 		courseworkResult = marks;
 	}
 	
+	/**
+	 * Overrides the equals method.
+	 * Returns true if the course code and student ID matches.
+	 */
 	public boolean equals(Object o) {
 		if (o instanceof StudentCourse) {
 			StudentCourse sc = (StudentCourse)o;
