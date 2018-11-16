@@ -5,12 +5,33 @@ import java.util.Scanner;
 
 public class StudentManager
 { //this is a control class
+	
 	protected ArrayList<Student> list = new ArrayList<Student>();
+	
+	/**
+	 * Path to the dat file storing Student's data.
+	 */
 	private String filename = "student.dat";
 	private Scanner scan = new Scanner(System.in);
+	
+	/**
+	 * A string of identification number for Student which encodes some details
+	 * of the students.
+	 * studentID is not case-sensitive.
+	 */
 	private String studentID;
+	
+	/**
+	 * Instance of StudentManager class.
+	 * null if StudentManager have not been constructed yet.
+	 */
 	private static StudentManager theinstance = null;
 
+	/**
+	 * Constructor of StudentManager.
+	 * Catches exception and prints relevant message.
+	 * Prints message when StudentManager is successfully created.
+	 */
 	private StudentManager()
 	{
 		System.out.println("Loading student data... Please wait...");
@@ -18,16 +39,16 @@ public class StudentManager
 		{
 			list = (ArrayList<Student>) IOE.readSerializedObject(filename);
 			if(list == null) list = new ArrayList<Student>();
-			// for (int i = 0; i < list.size(); i++)
-			// {
-			// 	Student c = (Student) list.get(i);
-			// 	System.out.println(c);
-			// }
 		}
 		catch(Exception e){System.out.println( "Exception StudentManager() >> "+e.getMessage());}
 		System.out.println("Load student data, done.\n");
 	}
 
+	/**
+	 * Initializes StudentManager.
+	 * @return the instance of StudentManager if it has been initialized before.
+	 * 		   Otherwise, instantiates a new StudentManager and stores in the attribute theinstance.
+	 */
 	public static StudentManager initiate() 
 	{
 		if(theinstance == null)
@@ -35,6 +56,13 @@ public class StudentManager
 		return theinstance;
 	}
 
+	/**
+	 * Allows user to add student.
+	 * Asks user for student's information: ID, name and password.
+	 * ID has to be at least 9 characters long and starts with a 'U'.
+	 * Updates the dat file after student is successfully added.
+	 * @return Name of the student added. null if student is not successfully added.
+	 */
 	public String addStudent()
 	{
 		System.out.print("Adding student. ");
@@ -71,6 +99,11 @@ public class StudentManager
 		return null;
 	}
 
+	/**
+	 * Allows user to delete a student.
+	 * Asks user to enter student ID.
+	 * Prints error message if student not found.
+	 */
 	public void deleteStudent()
 	{
 		System.out.print("Enter student matric to delete: ");
@@ -85,13 +118,18 @@ public class StudentManager
 		System.out.println("Student not found.");
 	}
 	
+	/**
+	 * Allows user to retrieve student's details by entering student ID.
+	 * @param profile This student's ID.
+	 * @return The Student object.
+	 */
 	public Student getStudent(String profile)
 	{
 		studentID = profile;
 		if(studentID == null)
 		{
 			System.out.print("Enter student matric to show info: ");
-			studentID = scan.next().toUpperCase();
+			studentID = scan.next().toUpperCase(); 
 		}
 		for(Student temp: list)
 			if(studentID.equals(temp.getID()))
@@ -100,15 +138,24 @@ public class StudentManager
 		return null;
 	}
 	
+	/**
+	 * Gets the student name of a student ID.
+	 * @param sID Student's student ID.
+	 * @return Student's student name. "NA" if student is not found.
+	 */
 	public String getStudentName(String sID)
 	{
 		for(Student temp: list)
-			if(studentID.equals(temp.getID()))
+			if(sID.equals(temp.getID()))
 				return temp.getName();
 		System.out.println("Student not found.");
 		return "NA";
 	}
 
+	/**
+	 * Prints list of all students in the system.
+	 * Catches exception and prints out relevant error message.
+	 */
 	public void printStudents()
 	{
 		System.out.println("\nComplete list of students");
