@@ -9,30 +9,51 @@ import java.util.Set;
 public class CourseManager
 {
 	protected ArrayList<Course> list = new ArrayList<Course>();
+	/**
+	 * dat file containing pre-exisitng records of Course objects.
+	 */
 	private String filename = "course.dat";
 	private Scanner scan = new Scanner(System.in);
+	
+	/**
+	 * courseCode is a string with 2 characters of abbreviation of course major in front, 
+	 * followed by 4 numbers indicating their level and ID
+	 */
 	private String courseCode;
+	
+	/** 
+	 * Stores the instance of CourseManager so that the same instance will be used throughout the program. 
+	 */
 	private static CourseManager theinstance = null;
+	
+	/** 
+	 * Initiates ProfessorManager.
+	 */
 	private static ProfessorManager professormanager = ProfessorManager.initiate();
 
-
+	/**
+	 * Constructor of CourseManager.
+	 * Catches exception and prints relevant message.
+	 * Prints message when CourseManager is successfully created.
+	 */
 	private CourseManager()
 	{
 		System.out.println("Loading course data... Please wait...");
 		try
 		{
-				list = (ArrayList) IOE.readSerializedObject(filename);
+			list = (ArrayList) IOE.readSerializedObject(filename);
 			if(list == null) list = new ArrayList<Course>();
-			/*for (int i = 0; i < list.size(); i++)
-			{
-				Course c = (Course) list.get(i);
-				System.out.println(c);
-			}*/
+
 		}
 		catch(Exception e){System.out.println( "Exception CourseManager() >> "+e.getMessage());}
 		System.out.println("Load course data, done.\n");
 	}
-
+	
+	/**
+	 * Initializes CourseManager.
+	 * @return the instance of CourseManager if it has been initialized before.
+	 * 		   Otherwise, instantiates a new CourseManager and stores in the attribute theinstance.
+	 */
 	public static CourseManager initiate()
 	{
 		if(theinstance == null)
@@ -40,6 +61,18 @@ public class CourseManager
 		return theinstance;
 	}
 
+	/**
+	 * Allows user to add a new course.
+	 * The steps of a successful course addition are given below:
+	 * - input course code (course code has to be 6 characters long and starts with 'CE')
+	 * - input course name
+	 * - select the course coordinator based on the list of Professors in the profesor.txt file.
+	 * - indicate whether the course has lecture, tutorial and lab
+	 * - input the vacancy of the course
+	 * - input the tutorial and lab groups if applicable
+	 * - input the exam and coursework weightages
+	 * @return courseName if course if successfully added. null if adding is not successful.
+	 */
 	public String addCourse()
 	{	
 		String courseCode;
@@ -74,11 +107,11 @@ public class CourseManager
 		for(int i = 0; i < 3; i++)
 		{
 			System.out.println("Does it have "+ar[i]+"? (yes/no)");
-			temp = read.next().toLowerCase();
+			temp = read.next().toLowerCase(); read.nextLine();
 			while(!temp.equals("yes") && !temp.equals("y") && !temp.equals("no") && !temp.equals("n"))
 			{
 				System.out.print("Try again: ");
-				temp = read.next().toLowerCase();
+				temp = read.next().toLowerCase(); read.nextLine();
 			}
 			if(temp.equals("yes") || temp.equals("y")) numOfGroup[i] = 1;
 			else numOfGroup[i] = 0;
@@ -201,6 +234,10 @@ public class CourseManager
 		return null;
 	}
 
+	/**
+	 * Allows user to delete a course.
+	 * Asks user to input course code.
+	 */
 	public void deleteCourse()
 	{
 		System.out.print("Enter course code to delete: ");
@@ -215,10 +252,15 @@ public class CourseManager
 		System.out.println("Course not found!");
 	}
 
+	/**
+	 * Allows user to check the vacancy of a course.
+	 * Asks user to input course code.
+	 * Prints out the overall vacancy and also the vacancy of tutorial and lab groups if applicable.
+	 */
 	public void checkVacancy()
 	{
 		System.out.print("Enter course code to check the vacancy: ");
-		courseCode = scan.next().toUpperCase();
+		courseCode = scan.next().toUpperCase(); scan.nextLine();
 		for(Course temp: list)
 			if(courseCode.equals(temp.getCourseCode()))
 			{
@@ -230,6 +272,11 @@ public class CourseManager
 		System.out.println("Course not found!");
 	}
 	
+	/**
+	 * Gets the vacancy of a course.
+	 * @param courseCode The Course's course code.
+	 * @return Vacancy of the course. -1 to indicate that course is not found.
+	 */
 	public int getVacancy(String courseCode){ // for StudentCourse
 		for(Course temp: list)
 			if(courseCode.equals(temp.getCourseCode())) { 
@@ -238,7 +285,12 @@ public class CourseManager
 		return -1;
 	}
 	
-	public Map checkAvailableTutGroup(String courseCode) // for StudentCourse
+	/**
+	 * Prints the available tutorial groups.
+	 * @param courseCode The Course's coursecode.
+	 * @return Map with tutorial group as the key and its vacancy as the value.
+	 */
+	public Map checkAvailableTutGroup(String courseCode) 
 	{
 		for(Course temp: list)
 			if(courseCode.equals(temp.getCourseCode())){
@@ -257,7 +309,12 @@ public class CourseManager
 		return null;
 	}
 	
-	public Map checkAvailableLabGroup(String courseCode) // for StudentCourse
+	/**
+	 * Prints the available lab groups.
+	 * @param courseCode The Course's course code.
+	 * @return Map with lab group as the key and its vacancy as the value.
+	 */
+	public Map checkAvailableLabGroup(String courseCode) 
 	{
 		for(Course temp: list)
 			if(courseCode.equals(temp.getCourseCode())){
@@ -274,7 +331,12 @@ public class CourseManager
 			}
 		return null;
 	}
-	
+
+	/**
+	 * Gets the number of coursework component. 
+	 * @param courseCode The Course's course code.
+	 * @return The number of coursework component. 
+	 */
 	public int getNumOfComponent(String courseCode)
 	{ // for StudentCourse
 		for(Course temp: list)
@@ -284,6 +346,10 @@ public class CourseManager
 		return -1;
 	}
 
+	/**
+	 * Prints the course coordinator information.
+	 * Asks user to input course code.
+	 */
 	public void showCoordinator()
 	{
 		System.out.print("Enter course code to show coordinator: ");
@@ -294,6 +360,9 @@ public class CourseManager
 		System.out.println("Course not found!");
 	}
 
+	/**
+	 * Prints out all the cou
+	 */
 	public void printCourses()
 	{
 		System.out.println("\nAll courses available");
