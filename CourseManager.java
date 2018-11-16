@@ -235,8 +235,8 @@ public class CourseManager
 	}
 
 	/**
-	 * Allows user to delete a course.
-	 * Asks user to input course code.
+	 * Allows admin to delete a course.
+	 * Asks admin to input course code.
 	 */
 	public void deleteCourse()
 	{
@@ -361,7 +361,7 @@ public class CourseManager
 	}
 
 	/**
-	 * Prints out all the cou
+	 * Prints out all the courses
 	 */
 	public void printCourses()
 	{
@@ -378,6 +378,11 @@ public class CourseManager
 		catch ( Exception e ){System.out.println( "Exception printCourses() >> " + e.getMessage());}
 	}
 	
+	/**
+	 * get all the tutorial group of this course
+	 * @param courseCode the course code
+	 * @return the list of tutorial group available in this course
+	 */
 	public Set getTutGroup (String courseCode)
 	{ // for StudentCourse
 		for(Course temp: list) {
@@ -390,6 +395,11 @@ public class CourseManager
 		return null;
 	}
 
+	/**
+	 * get all the lab group of this course
+	 * @param courseCode the course code
+	 * @return the list of tutorial group available in this course
+	 */
 	public Set getLabGroup (String courseCode)
 	{ // for StudentCourse
 		for(Course temp: list) {
@@ -402,6 +412,12 @@ public class CourseManager
 		return null;
 	}
 	
+	/**
+	 * update the vacancy list of the course
+	 * @param courseCode course code 
+	 * @param tutGroup tutorial group
+	 * @param labGroup lab group
+	 */
 	public void updateVacancy(String courseCode, String tutGroup, String labGroup)
 	{ // for StudentCourse 
 	  // "NA" for non tut or lab groups
@@ -425,6 +441,11 @@ public class CourseManager
 		}
 	}
 	
+	/**
+	 * get the exam weitage of this course
+	 * @param courseCode the coursecode
+	 * @return the exam weitage in integer type
+	 */
 	public int getExamWeightage(String courseCode)
 	{
 		for(Course temp: list)
@@ -433,6 +454,11 @@ public class CourseManager
 		return -1;
 	}
 
+	/**
+	 * get the course name of the course code given in parameter
+	 * @param courseCode the course code
+	 * @return the name of the course as string
+	 */
 	public String getCourseName(String courseCode)
 	{
 		for(Course temp: list)
@@ -441,6 +467,11 @@ public class CourseManager
 		return "No such course.";
 	}
 
+	/**
+	 * return the coursework component
+	 * @param courseCode coursecode
+	 * @returnreturn the coursework component odf this course
+	 */
 	public Map<String, Integer> getCourseworkComponent(String courseCode)
 	{
 		for(Course temp: list)
