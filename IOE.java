@@ -8,10 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-/**
- * this method asking for a valid integer input 
- * and print an appropriate warning message for invalid input
- */
+
 public class IOE
 {
 	public static int scint()
@@ -25,11 +22,6 @@ public class IOE
 		return scan.nextInt();
 	}
 
-	/**
-	 * read the serialized data from a given file name
-	 * @param filename going to be read
-	 * @return pDetails, the data from the file
-	 */
 	public static ArrayList readSerializedObject(String filename) {
 		ArrayList pDetails = null;
 		FileInputStream fis = null;
@@ -52,11 +44,6 @@ public class IOE
 		return pDetails;
 	}
 
-	/**
-	 * write the object to the serialized file
-	 * @param filename the file going to be written
-	 * @param list 
-	 */
 	public static void writeSerializedObject(String filename, ArrayList list) {
 		FileOutputStream fos = null;
 		ObjectOutputStream out = null;

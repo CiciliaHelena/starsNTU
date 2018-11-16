@@ -1,6 +1,9 @@
 // package starsNTU;
 import java.util.ArrayList;
 
+/**
+ * this class is responsible for identification and authorization purpose
+ */
 public class LoginManager
 {
 	protected ArrayList<Student> list;
@@ -19,6 +22,12 @@ public class LoginManager
 		return theinstance;
 	}
 
+	/**
+	 * this method will identify the user based on the data in database
+	 * @param username the username for the account
+	 * @param password the password for the account
+	 * @return the ID of the account if login successful, else return null
+	 */
 	public String login(String username, String password)
 	{
 		if(username.equals("ADMIN") && password.equals("admin"))
