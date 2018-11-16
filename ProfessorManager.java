@@ -6,11 +6,30 @@ import java.util.Scanner;
 import java.util.StringTokenizer;
 
 public class ProfessorManager {
+	
+	/**
+	 * separator to standardise formatting and partitioning
+	 */
 	public static final String SEPARATOR = "|";
+	
+	/**
+	 * pre-existing file consisting of data of professors
+	 */
 	String filename = "professor.txt";
+	
+	
 	protected ArrayList<Professor> al = new ArrayList<Professor>();
+	
+	/**
+	 * initializes instance to null
+	 * esentially restarting the file reading and Manager
+	 */
 	private static ProfessorManager theinstance = null;
 
+	/**
+	 * Constructor to initialize the class,
+	 * private and is a singleton
+	 */
 	private ProfessorManager() {
 		try {
 			al = readProfessors(filename);
@@ -20,12 +39,18 @@ public class ProfessorManager {
 		}
 	}
 	
+	/**
+	 * Calls the contructor if there is no current instance
+	 */
 	public static ProfessorManager initiate() {
 		if(theinstance == null)
 			theinstance = new ProfessorManager();
 		return theinstance;
 	}
 	
+	/**
+	 * print list of professors on the file
+	 */
 	public void printProfessors () {
 		for (int i = 0 ; i < al.size() ; i++) {
 			Professor prof = (Professor)al.get(i);
@@ -41,6 +66,9 @@ public class ProfessorManager {
 		return al.get(i-1).getName();
 	}
 	
+	/**
+	 * prints complete details of professor given the name of a professor
+	 */
 	public void printDetails(String n) {
 		for (int i = 0 ; i < al.size() ; i++) {
 			Professor cur = al.get(i);
@@ -54,6 +82,9 @@ public class ProfessorManager {
 		}
 	}
 	
+	/**
+	 * function to read professor objects in a file and returns them
+	 */
 	public static ArrayList readProfessors(String filename) throws IOException {
 		// read String from text file
 		ArrayList stringArray = (ArrayList)read(filename);
@@ -74,6 +105,9 @@ public class ProfessorManager {
 			return alr ;
 	}
 	
+	/**
+	 * reads a file of professor objects and returns a list
+	 */
 	public static List read(String fileName) throws IOException {
 		List data = new ArrayList() ;
 	    Scanner scanner = new Scanner(new FileInputStream(fileName));
